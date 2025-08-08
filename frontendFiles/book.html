@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details - Spark Library</title>
+    <link rel="stylesheet" href="bookDetail.css">
+    <link rel="shortcut icon" href="#">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="header-content">
+            <a href="/sparkHome.html" class="home-link">
+                <h1>Spark Library</h1>
+            </a>
+            <div class="profile-icon" id="profileIcon" title="Logout"></div>
+        </div>
+    </header>
+
+    <a href="sparkHome.html" class="back-button">&larr; Back to Home</a>
+
+
+    <main class="main-content" id="bookDetailContainer">
+        <!-- Details will be loaded here by JavaScript -->
+        <div class="loader"></div>
+    </main>
+
+
+    <section id="review-section" class="review-container">
+        <h2>Reviews 🌟</h2>
+
+        <div id="user-review-area">
+        </div>
+
+        <hr class="review-divider">
+
+        <h3>What others are saying...</h3>
+        <div id="other-reviews-list">
+            <p>Loading reviews...</p>
+        </div>
+    </section>
+
+
+    <footer class="site-footer-bottom">
+        <p>&copy; 2025 Spark Library Platform. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="bookDetail.js"></script>
+</body>
+
+</html>

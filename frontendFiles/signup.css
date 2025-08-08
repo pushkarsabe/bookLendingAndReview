@@ -1,0 +1,112 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #e8f5e9;
+    /* light green background */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #a5d6a7;
+    /* green header */
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h2 {
+    color: #1b5e20;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 30px;
+    margin: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+}
+
+label {
+    font-weight: bold;
+    align-self: flex-start;
+    color: #2e7d32;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #c8e6c9;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input:focus {
+    border-color: #66bb6a;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #81c784;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #66bb6a;
+}
+
+#message {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.succesMessage {
+    background-color: rgba(0, 255, 0, 0.3);
+    padding: 10px;
+    border-radius: 6px;
+    color: #1b5e20;
+    text-align: center;
+}
+
+.failureMessage {
+    background-color: rgba(255, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 6px;
+    color: #b71c1c;
+    text-align: center;
+}
+
+@media screen and (max-width: 500px) {
+    form {
+        padding: 20px;
+    }
+
+    input,
+    button {
+        font-size: 16px;
+    }
+}

@@ -1,0 +1,63 @@
+Book Lending & Review Platform for Libraries
+Project Overview
+
+Build a backend system for public or private libraries and book clubs to manage book lending, user memberships, borrowing history, and community reviews—designed for both library administrators and members.
+Core Features
+
+    Authentication & Roles
+
+        JWT-based authentication.
+
+        Roles: Admin, Member, Librarian. Granular permissions (e.g., only admins can add/remove books, librarians approve borrow/return requests).
+
+    Book Inventory & Borrowing
+
+        Users can browse/search available books.
+
+        Place borrow requests, track due dates, and request extensions.
+
+        Status tracking: available, borrowed, overdue, reserved.
+
+    Community Reviews
+
+        Members can add reviews and ratings for books.
+
+        List top-rated books, most borrowed, or trending books.
+
+    Membership & Borrowing History
+
+        Users can register and view their borrowing/review history.
+
+        Admin reports: most active borrowers, most borrowed books.
+
+    Notifications
+
+        Email notifications for overdue books, new arrivals, review approvals.
+
+Where MySQL JOINs Shine
+
+    Show all books currently borrowed by a member (JOIN users, books, lendings).
+
+    List all reviews for a specific book including reviewer details (JOIN books, reviews, users).
+
+    Get a report of overdue books with associated members (JOIN books, lendings, users).
+
+Suggested Tables
+
+    Users (user_id, name, email, password, role)
+
+    Books (book_id, title, author, genre, status)
+
+    Lendings (lending_id, user_id, book_id, borrow_date, due_date, returned_date)
+
+    Reviews (review_id, book_id, user_id, rating, comment, created_at)
+
+Why This Is a Standout Project
+
+    Practical Application: Real-world use case for libraries/clubs and showcases advanced backend competencies.
+
+    Complex Data Relationships: MySQL JOINs for lending and review analytics.
+
+    Secure & Robust Stack: Node.js, Express, JWT, and MySQL all in action.
+
+    Portfolio-Ready: Goes beyond trivial CRUD; demonstrates professional server-side design and reporting.

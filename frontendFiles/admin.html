@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Spark Library</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="shortcut icon" href="#">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-content">
+            <h1>Admin Panel 🛠️</h1>
+            <a href="/sparkHome.html" class="home-link">Back to Main Library</a>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <section class="admin-section">
+            <h2>Add New Book</h2>
+            <form id="addBookForm">
+                <input type="text" id="title" placeholder="Book Title" required>
+                <input type="text" id="author" placeholder="Author" required>
+                <input type="text" id="genre" placeholder="Genre">
+                <textarea id="description" placeholder="Description"></textarea>
+                <button type="submit" class="btn btn-primary">Add Book</button>
+            </form>
+        </section>
+
+        <section class="admin-section">
+            <h2>Manage Books</h2>
+            <div id="bookListContainer">
+                <div class="loader"></div>
+            </div>
+        </section>
+    </main>
+
+    <section class="admin-section">
+        <h2>Pending Return Requests</h2>
+        <div id="returnRequestsContainer">
+            <p>Loading requests...</p>
+        </div>
+    </section>
+
+    <footer class="site-footer-admin">
+        <p>&copy; 2025 Spark Library Admin Panel. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>

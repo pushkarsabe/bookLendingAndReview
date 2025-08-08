@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books Library Home</title>
+    <link rel="stylesheet" href="sparkHome.css">
+    <link rel="shortcut icon" href="#">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="header-content">
+            <h1>Books Library</h1>
+            <div class="profile-icon" id="profileIcon" title="Logout"></div>
+        </div>
+    </header>
+
+
+    <main class="main-content">
+        <section class="books-section">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search by title or author...">
+            </div>
+            <h2>Books</h2>
+            <div class="books-grid" id="booksGrid">
+                <div class="card-loader"></div>
+                <div class="card-loader"></div>
+                <div class="card-loader"></div>
+                <div class="card-loader"></div>
+            </div>
+        </section>
+
+        <section class="my-books-section">
+            <h2>My Borrowed Books</h2>
+            <div class="my-books-grid" id="myBooksGrid">
+                <!-- User's borrowed books will be inserted here -->
+                <div class="card-loader-small"></div>
+                <div class="card-loader-small"></div>
+            </div>
+        </section>
+    </main>
+
+
+
+    <footer class="site-footer-bottom">
+        <p>&copy; 2025 Spark Library Platform. All Rights Reserved.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="sparkHome.js"></script>
+</body>
+
+</html>
