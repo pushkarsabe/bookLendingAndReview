@@ -1,3 +1,6 @@
+//live link for the access of others
+https://book-lending-ui.onrender.com
+
 Spark Library - Book Lending & Review Platform
 
 A full-stack web application built with a Node.js backend and a vanilla JavaScript frontend. This platform allows users to register, browse a library of books, borrow available titles, and leave reviews. The application features a robust role-based access control system, providing a separate, secure dashboard for administrators to manage the book inventory and user return requests.
