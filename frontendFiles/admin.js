@@ -1,6 +1,6 @@
 console.log('Admin script loaded.');
 // const HOST = 'localhost';
-const HOST = '';
+const HOST = 'https://book-lending-and-review.onrender.com/';
 
 function decodeJwt(token) {
     try {
