@@ -5,12 +5,12 @@ let sequelize;
 if (process.env.DATABASE_URL) {
     // This block will be used by Render
     sequelize = new Sequelize(process.env.DATABASE_URL, {
-        dialect: 'mysql',
-        protocol: 'mysql',
+        dialect: 'postgres',
+        protocol: 'postgres',
         dialectOptions: {
             ssl: {
                 require: true,
-                rejectUnauthorized: false // Necessary for some cloud database providers
+                rejectUnauthorized: false // Necessary for Render's Postgres
             }
         }
     });
