@@ -2,6 +2,7 @@ console.log('Admin script loaded.');
 // const HOST = 'localhost';
 const HOST = 'https://book-lending-and-review.onrender.com';
 
+
 function decodeJwt(token) {
     try {
         // Split the token into its three parts: header, payload, and signature
@@ -127,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // const response = await axios.get('http://${HOST}:3000/api/books/', {
             //     headers: { 'Authorization': `Bearer ${token}` }
             // });
-              const response = await axios.get('${HOST}/api/books/', {
+              const response = await axios.get(`${HOST}/api/books/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             console.log('Books fetched:', response.data.books);
@@ -169,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // let res = await axios.post('http://${HOST}:3000/api/books/', bookData, {
             //     headers: { 'Authorization': `Bearer ${token}` }
             // });
-            let res = await axios.post('${HOST}/api/books/', bookData, {
+            let res = await axios.post(`${HOST}/api/books/`, bookData, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             console.log('Book added:', res.data);
@@ -193,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // let res = await axios.delete(`http://${HOST}:3000/api/books/${bookId}`, {
                     //     headers: { 'Authorization': `Bearer ${token}` }
                     // });
-                     let res = await axios.delete(`${HOST}/api/books/${bookId}`, {
+                     let res = await axios.delete(`F${HOST}/api/books/${bookId}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     console.log('Book deleted:', res.data);
