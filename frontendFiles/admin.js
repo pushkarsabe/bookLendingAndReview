@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //         'Authorization': `Bearer ${token}`
             //     }
             // });
-            const response = await axios.get(`${HOST}:3000/api/lendings/admin/pending-returns`, {
+            const response = await axios.get(`${HOST}/api/lendings/admin/pending-returns`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //     { action: action },
             //     { headers: { 'Authorization': `Bearer ${token}` } }
             // );
-            const response = await axios.put(`${HOST}:3000/api/lendings/admin/process-return/${lendingId}`,
+            const response = await axios.put(`${HOST}/api/lendings/admin/process-return/${lendingId}`,
                 { action: action },
                 { headers: { 'Authorization': `Bearer ${token}` } }
             );
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // const response = await axios.get('http://${HOST}:3000/api/books/', {
             //     headers: { 'Authorization': `Bearer ${token}` }
             // });
-              const response = await axios.get('${HOST}:3000/api/books/', {
+              const response = await axios.get('${HOST}/api/books/', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             console.log('Books fetched:', response.data.books);
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // let res = await axios.post('http://${HOST}:3000/api/books/', bookData, {
             //     headers: { 'Authorization': `Bearer ${token}` }
             // });
-            let res = await axios.post('${HOST}:3000/api/books/', bookData, {
+            let res = await axios.post('${HOST}/api/books/', bookData, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             console.log('Book added:', res.data);
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // let res = await axios.delete(`http://${HOST}:3000/api/books/${bookId}`, {
                     //     headers: { 'Authorization': `Bearer ${token}` }
                     // });
-                     let res = await axios.delete(`${HOST}:3000/api/books/${bookId}`, {
+                     let res = await axios.delete(`${HOST}/api/books/${bookId}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     console.log('Book deleted:', res.data);

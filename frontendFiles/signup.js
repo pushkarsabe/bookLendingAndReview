@@ -52,7 +52,7 @@ async function submitData() {
         }
         try {
             // const response = await axios.post(`http://${HOST}:3000/api/users/register`, obj);
-            const response = await axios.post(`${HOST}:3000/api/users/register`, obj);
+            const response = await axios.post(`${HOST}/api/users/register`, obj);
 
             console.log('data added');
             console.log('response data = ' + JSON.stringify(response));

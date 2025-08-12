@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // const response = await axios.get(`http://${HOST}:3000/api/books/`, {
             //     headers: { 'Authorization': `Bearer ${token}` }
             // });
-            const response = await axios.get(`${HOST}:3000/api/books/`, {
+            const response = await axios.get(`${HOST}/api/books/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             console.log('Books fetched successfully:', response.data);
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // await axios.post(`http://${HOST}:3000/api/lendings/borrow`, { book_id: bookId }, {
             //     headers: { 'Authorization': `Bearer ${token}` }
             // });
-            await axios.post(`${HOST}:3000/api/lendings/borrow`, { book_id: bookId }, {
+            await axios.post(`${HOST}/api/lendings/borrow`, { book_id: bookId }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             alert('Book borrowed successfully! It will now appear in your "My Books" section.');
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // const response = await axios.get(`http://${HOST}:3000/api/lendings`, {
             //     headers: { 'Authorization': `Bearer ${token}` }
             // });
-            const response = await axios.get(`${HOST}:3000/api/lendings`, {
+            const response = await axios.get(`${HOST}/api/lendings`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             displayMyBooks(response.data);
