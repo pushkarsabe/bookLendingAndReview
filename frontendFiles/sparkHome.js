@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const booksGrid = document.getElementById('booksGrid');
     const searchInput = document.getElementById('searchInput');
-    const profileIcon = document.getElementById('profileIcon');
+    const profileIcon = document.getElementById('signOutBtn');
     const myBooksGrid = document.getElementById('myBooksGrid');
 
     let allBooks = []; // To store all fetched books

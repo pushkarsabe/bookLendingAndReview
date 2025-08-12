@@ -19,7 +19,36 @@ body {
     line-height: 1.6;
 }
 
+
+
 /* --- Header --- */
+.header-actions {
+    margin-left: auto;
+}
+
+.sign-out-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.sign-out-btn:hover {
+    background-color: #e04050;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.sign-out-btn:active {
+    transform: translateY(0);
+}
+
 .site-header {
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
     color: white;

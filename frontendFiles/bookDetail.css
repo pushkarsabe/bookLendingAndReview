@@ -43,6 +43,7 @@ body {
     text-decoration: none;
 }
 
+
 .profile-icon {
     width: 45px;
     height: 45px;
@@ -60,7 +61,38 @@ body {
     transform: scale(1.1);
 }
 
+.header-actions {
+    margin-left: auto;
+}
 
+.sign-out-btn {
+    padding: 0.75rem 1.5rem;
+    /* Increased padding for a larger size */
+    font-size: 1rem;
+    /* Larger font size */
+    /* Appearance */
+    background-color: #ff4757;
+    /* A distinct red color */
+    color: white;
+    border: none;
+    border-radius: 50px;
+    /* Rounded corners */
+    font-weight: 600;
+    cursor: pointer;
+    /* Effects */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.sign-out-btn:hover {
+    background-color: #e04050;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.sign-out-btn:active {
+    transform: translateY(0);
+}
 
 
 .site-footer-bottom {
@@ -424,26 +456,30 @@ body {
     border-radius: 12px;
     padding: 2rem 2.5rem;
     text-align: center;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); /* Soft shadow to highlight */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    /* Soft shadow to highlight */
     border: 1px solid #e9ecef;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 #bookDetailContainer:hover {
-    transform: translateY(-5px); /* Subtle lift effect on hover */
+    transform: translateY(-5px);
+    /* Subtle lift effect on hover */
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
 }
 
 /* --- Typography Enhancements --- */
 #bookDetailContainer h1 {
-    font-size: 2.5rem; /* Larger title */
+    font-size: 2.5rem;
+    /* Larger title */
     color: #212529;
     margin-bottom: 0.5rem;
 }
 
 #bookDetailContainer .author {
     font-size: 1.1rem;
-    color: #6c757d; /* Softer color for author */
+    color: #6c757d;
+    /* Softer color for author */
     margin-top: 0;
     margin-bottom: 1.5rem;
 }
@@ -452,7 +488,8 @@ body {
     font-size: 1rem;
     color: #495057;
     line-height: 1.6;
-    max-width: 600px; /* Improve readability */
+    max-width: 600px;
+    /* Improve readability */
     margin: 0 auto 2rem auto;
 }
 
@@ -472,7 +509,8 @@ body {
 }
 
 .lending-info strong {
-    color: #0056b3; /* Highlight important details */
+    color: #0056b3;
+    /* Highlight important details */
 }
 
 /* --- Enhanced Button Styles --- */
@@ -480,7 +518,8 @@ body {
     font-size: 1rem;
     font-weight: 600;
     padding: 0.8rem 1.75rem;
-    border-radius: 50px; /* Pill-shaped buttons */
+    border-radius: 50px;
+    /* Pill-shaped buttons */
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -500,7 +539,8 @@ body {
 
 /* Specific style for the Extend button */
 #extend-btn {
-    background-color: #343a40; /* A strong, dark color */
+    background-color: #343a40;
+    /* A strong, dark color */
     color: #ffffff;
     margin-top: 1rem;
 }

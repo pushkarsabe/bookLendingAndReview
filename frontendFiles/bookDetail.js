@@ -15,11 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const profileIcon = document.getElementById('profileIcon');
+    const signOutBtn = document.getElementById('signOutBtn');
 
-    profileIcon.addEventListener('click', () => {
-        localStorage.removeItem('token');
-        window.location.href = './index.html';
+    signOutBtn.addEventListener('click', () => {
+        if (signOutBtn) {
+            signOutBtn.addEventListener('click', () => {
+                localStorage.removeItem('token');
+                // Redirect to the login page or homepage
+                window.location.href = './index.html';  
+            });
+        }
     });
 
     const urlParams = new URLSearchParams(window.location.search);
