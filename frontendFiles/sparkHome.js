@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let allBooks = []; // To store all fetched books
 
     if (!token) {
-        window.location.href = './login.html';
+        window.location.href = './index.html';
         return;
     }
     fetchAndDisplayBooks();
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     profileIcon.addEventListener('click', () => {
         localStorage.removeItem('token');
-        window.location.href = './login.html';
+        window.location.href = './index.html';
     });
 
     searchInput.addEventListener('input', (e) => {
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Fetching books with token:', token);
             if (!token) {
                 console.error('No token found, redirecting to login.');
-                window.location.href = './login.html';
+                window.location.href = './index.html';
                 return;
             }
 
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (error.response && error.response.status === 401) {
                 // If token is invalid, redirect to login
                 localStorage.removeItem('token');
-                window.location.href = './login.html';
+                window.location.href = './index.html';
             }
         }
     }
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Fetching my books with token:', token);
             if (!token) {
                 console.error('No token found, redirecting to login.');
-                window.location.href = './login.html';
+                window.location.href = './index.html';
                 return;
             }
             myBooksGrid.innerHTML = ''; // Clear existing content

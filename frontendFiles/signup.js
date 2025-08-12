@@ -10,7 +10,7 @@ document.getElementById('signupForm').addEventListener('submit', function (event
 });
 
 document.getElementById('loginBtn').addEventListener('click', function () {
-    window.location.href = './login.html';
+    window.location.href = './index.html';
 });
 
 //function to display the message

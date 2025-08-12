@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!authToken || !currentUser) {
         console.warn('User not authenticated. Redirecting to login page.');
-        window.location.href = './login.html';
+        window.location.href = './index.html';
         return;
     }
 
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     profileIcon.addEventListener('click', () => {
         localStorage.removeItem('token');
-        window.location.href = './login.html';
+        window.location.href = './index.html';
     });
 
     const urlParams = new URLSearchParams(window.location.search);
