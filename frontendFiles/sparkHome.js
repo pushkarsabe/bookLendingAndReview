@@ -1,6 +1,6 @@
 console.log('sparkHome.js loaded');
 // const HOST = 'localhost';
-const HOST = 'https://book-lending-and-review.onrender.com/';
+const HOST = 'https://book-lending-and-review.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');

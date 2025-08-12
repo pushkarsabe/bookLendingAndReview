@@ -1,7 +1,7 @@
 
 console.log('login.js loaded');
 // const HOST = 'localhost';
-const HOST = 'https://book-lending-and-review.onrender.com/';
+const HOST = 'https://book-lending-and-review.onrender.com';
 
 document.getElementById('loginForm').addEventListener('submit', function (event) {
     event.preventDefault();
