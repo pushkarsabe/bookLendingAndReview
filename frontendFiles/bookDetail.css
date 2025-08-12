@@ -82,6 +82,7 @@ body {
     /* Effects */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    margin-right: -138px;
 }
 
 .sign-out-btn:hover {
@@ -547,4 +548,36 @@ body {
 
 #extend-btn:hover {
     background-color: #495057;
+}
+
+
+/* --- Star Rating --- */
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.rating input:checked~label,
+.rating label:hover,
+.rating label:hover~label {
+    color: #f7d32e;
+}
+
+/* --- Displaying Saved Ratings --- */
+.saved-rating {
+    color: #f7d32e;
+    font-size: 1.2rem;
 }

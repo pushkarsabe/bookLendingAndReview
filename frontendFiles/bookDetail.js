@@ -1,5 +1,5 @@
 console.log('bookDetail.js loaded');
-// const HOST = 'localhost';
+// const HOST = 'http://localhost:3000';
 const HOST = 'https://book-lending-and-review.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             signOutBtn.addEventListener('click', () => {
                 localStorage.removeItem('token');
                 // Redirect to the login page or homepage
-                window.location.href = './index.html';  
+                window.location.href = './index.html';
             });
         }
     });
@@ -135,20 +135,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function postReview(reviewText) {
-        console.log('Posting review:', reviewText);
+    async function postReview(rating, reviewText) {
+        console.log('Posting review:', { rating, reviewText });
 
         if (!actualBookId) return;
         try {
-            // await axios.post(`http://${HOST}:3000/api/books/${actualBookId}/review`,
-            //     { comment: reviewText },
-            //     { headers: { 'Authorization': `Bearer ${authToken}` } }
-            // );
-            await axios.post(`${HOST}/api/books/${actualBookId}/review`,
-                { comment: reviewText },
+            let res = await axios.post(`${HOST}/api/books/${actualBookId}/review`,
+                { rating: rating, comment: reviewText },
                 { headers: { 'Authorization': `Bearer ${authToken}` } }
             );
+            console.log('Review posted:', res.data);
+
             alert('Review saved successfully!');
+
             fetchReviews();
         } catch (error) {
             console.error('Error saving review:', error);
@@ -161,6 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const userReview = reviews.find(review => review.user_id === currentUser.id);
         const otherReviews = reviews.filter(review => review.user_id !== currentUser.id);
+        console.log('User review:', userReview);
+        console.log('Other reviews:', otherReviews);
 
         userReviewArea.innerHTML = '';
         otherReviewsList.innerHTML = '';
@@ -174,9 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const reviewCard = document.createElement('div');
                 reviewCard.className = 'review-card';
                 reviewCard.style.animationDelay = `${index * 0.1}s`;
+                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                console.log('Rendering stars:', stars);
+
                 reviewCard.innerHTML = `
-                    <div class="review-header"><span class="review-username">${review.User.name}</span></div>
-                    <p class="review-text">${review.text}</p>
+              <div class="review-header"><span class="review-username">${review.User.name}</span></div>
+              <div class="saved-rating">${stars}</div>
+              <p class="review-text">${review.comment}</p>
                 `;
                 otherReviewsList.appendChild(reviewCard);
             });
@@ -186,44 +191,81 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderUserReview(review) {
+        const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
         userReviewArea.innerHTML = `
-            <div class="review-card user-review">
-                <div class="review-header">
-                    <span class="review-username">${currentUser.name} (Your Review)</span>
-                    <button class="btn btn-secondary" id="edit-review-btn">Edit</button>
-                </div>
-                <p class="review-text">${review.comment}</p>
+        <div class="review-card user-review">
+            <div class="review-header">
+                <span class="review-username">${currentUser.name} (Your Review)</span>
+                <button class="btn btn-secondary" id="edit-review-btn">Edit</button>
             </div>
-        `;
+            <div class="saved-rating">${stars}</div>
+            <p class="review-text">${review.comment}</p>
+        </div>
+    `;
         document.getElementById('edit-review-btn').addEventListener('click', () => renderEditReviewForm(review));
     }
 
     function renderAddReviewForm() {
         userReviewArea.innerHTML = `
-            <h3>Add Your Review</h3>
-            <form id="review-form"><textarea id="review-text-input" placeholder="What did you think of the book?" required></textarea><div class="form-actions"><button type="submit" class="btn btn-primary">Submit Review</button></div></form>
-        `;
+        <h3>Add Your Review</h3>
+        <form id="review-form">
+            <div class="rating">
+                <input type="radio" id="star5" name="rating" value="5" /><label for="star5">★</label>
+                <input type="radio" id="star4" name="rating" value="4" /><label for="star4">★</label>
+                <input type="radio" id="star3" name="rating" value="3" /><label for="star3">★</label>
+                <input type="radio" id="star2" name="rating" value="2" /><label for="star2">★</label>
+                <input type="radio" id="star1" name="rating" value="1" /><label for="star1">★</label>
+            </div>
+            <textarea id="review-text-input" placeholder="What did you think of the book?" required></textarea>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            </div>
+        </form>
+    `;
         document.getElementById('review-form').addEventListener('submit', handleFormSubmit);
     }
 
     function renderEditReviewForm(review) {
         userReviewArea.innerHTML = `
-            <h3>Edit Your Review</h3>
-            <form id="review-form"><textarea id="review-text-input" required>${review.comment}</textarea><div class="form-actions"><button type="submit" class="btn btn-primary">Update Review</button><button type="button" class="btn btn-secondary" id="cancel-edit-btn">Cancel</button></div></form>
-        `;
+        <h3>Edit Your Review</h3>
+        <form id="review-form">
+            <div class="rating">
+                <input type="radio" id="star5" name="rating" value="5" ${review.rating == 5 ? 'checked' : ''} /><label for="star5">★</label>
+                <input type="radio" id="star4" name="rating" value="4" ${review.rating == 4 ? 'checked' : ''} /><label for="star4">★</label>
+                <input type="radio" id="star3" name="rating" value="3" ${review.rating == 3 ? 'checked' : ''} /><label for="star3">★</label>
+                <input type="radio" id="star2" name="rating" value="2" ${review.rating == 2 ? 'checked' : ''} /><label for="star2">★</label>
+                <input type="radio" id="star1" name="rating" value="1" ${review.rating == 1 ? 'checked' : ''} /><label for="star1">★</label>
+            </div>
+            <textarea id="review-text-input" required>${review.comment}</textarea>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Update Review</button>
+                <button type="button" class="btn btn-secondary" id="cancel-edit-btn">Cancel</button>
+            </div>
+        </form>
+    `;
         document.getElementById('review-form').addEventListener('submit', handleFormSubmit);
         document.getElementById('cancel-edit-btn').addEventListener('click', () => renderUserReview(review));
     }
 
     function handleFormSubmit(event) {
         event.preventDefault();
+        console.log(`Handling form submission...`);
+        // --- CHANGE: Get the selected rating value ---
+        const rating = document.querySelector('input[name="rating"]:checked');
         const reviewText = document.getElementById('review-text-input').value;
-        console.log('Review text:', reviewText);
+        console.log('Review text:', reviewText, 'Rating:', rating ? rating.value : 'No rating selected');
+
+        if (!rating) {
+            console.error('No rating selected.');
+            alert('Please select a rating.');
+            return;
+        }
         if (!reviewText.trim()) {
+            console.error('Review text is empty.');
             alert('Review cannot be empty!');
             return;
         }
-        postReview(reviewText);
+        postReview(rating.value, reviewText);
     }
 
     fetchLendingDetails();

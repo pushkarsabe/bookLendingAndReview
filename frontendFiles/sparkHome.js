@@ -1,5 +1,5 @@
 console.log('sparkHome.js loaded');
-// const HOST = 'localhost';
+// const HOST = 'http://localhost:3000';
 const HOST = 'https://book-lending-and-review.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {

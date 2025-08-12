@@ -1,5 +1,5 @@
 console.log('Admin script loaded.');
-// const HOST = 'localhost';
+// const HOST = 'http://localhost:3000'; // Change this to your actual host URL
 const HOST = 'https://book-lending-and-review.onrender.com';
 
 
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // const response = await axios.get('http://${HOST}:3000/api/books/', {
             //     headers: { 'Authorization': `Bearer ${token}` }
             // }); 
-              const response = await axios.get(`${HOST}/api/books/`, {
+            const response = await axios.get(`${HOST}/api/books/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             console.log('Books fetched:', response.data.books);
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // let res = await axios.delete(`http://${HOST}:3000/api/books/${bookId}`, {
                     //     headers: { 'Authorization': `Bearer ${token}` }
                     // });
-                     let res = await axios.delete(`${HOST}/api/books/${bookId}`, {
+                    let res = await axios.delete(`${HOST}/api/books/${bookId}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     console.log('Book deleted:', res.data);

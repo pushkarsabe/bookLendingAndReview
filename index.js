@@ -29,7 +29,7 @@ app.use('/api/lendings', lendingRoutes);
 
 // A simple route to serve the main page
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontendFiles', 'login.html'));
+    res.sendFile(path.join(__dirname, 'frontendFiles', 'index.html'));
 });
 
 

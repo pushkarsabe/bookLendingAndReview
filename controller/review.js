@@ -5,9 +5,14 @@ const Book = require('../model/Book');
 // Add or update a review for a book
 exports.addOrUpdateReview = async (req, res) => {
     const { bookId } = req.params;
-    const { comment } = req.body;
+    const { rating, comment } = req.body;
     const userId = req.user.id;
-    console.log(`User ID: ${userId}, Book ID: ${bookId}, Review comment: ${comment}`);
+    console.log(`addOrUpdateReview called User ID: ${userId}, Book ID: ${bookId}, Review comment: ${comment}`);
+    console.log(`Rating: ${rating}`);
+
+    if (!bookId || !rating || !comment) {
+        return res.status(400).json({ message: 'Book ID, rating, and comment are required' });
+    }
 
     try {
         // Use Sequelize's findOrCreate method.
@@ -20,16 +25,18 @@ exports.addOrUpdateReview = async (req, res) => {
             // These are the values used if a new review is 'created'.
             // If a review is found, it will be updated below.
             defaults: {
-                comment: comment
+                comment: comment,
+                rating: rating,
             }
         });
         console.log(`Review ${created ? 'created' : 'found'} for book ID: ${bookId} by user ID: ${userId}`);
 
-        // If the review was found (not created), update its comment.
+        // If the review was found (not created), update its comment and review.
         if (!created) {
-            // If the review was found (not created), update its comment.
             review.comment = comment;
+            review.rating = rating;
             await review.save();
+            console.log(`review - `, review);
         }
 
         res.status(201).json({
@@ -64,7 +71,7 @@ exports.getBookReviews = async (req, res) => {
             }],
             order: [['createdAt', 'DESC']] // Show newest reviews first
         });
-        console.log(`Reviews: `,reviews);
+        console.log(`Reviews: `, reviews);
         console.log(`Found ${reviews.length} reviews for book ID: ${bookId}`);
 
         res.status(200).json({
