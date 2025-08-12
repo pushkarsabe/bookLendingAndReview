@@ -1,4 +1,6 @@
 console.log('Admin script loaded.');
+// const HOST = 'localhost';
+const HOST = '';
 
 function decodeJwt(token) {
     try {
@@ -35,16 +37,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     let decodedToken = decodeJwt(token);
     console.log('Decoded Token:', decodedToken);
-    
+
     const addBookForm = document.getElementById('addBookForm');
     const bookListContainer = document.getElementById('bookListContainer');
     const returnRequestsContainer = document.getElementById('returnRequestsContainer');
 
     async function fetchAndDisplayReturnRequests() {
         try {
-            const response = await axios.get('http://localhost:3000/api/lendings/admin/pending-returns', {
-                headers: { 'Authorization': `Bearer ${token}` }
+            // const response = await axios.get(`http://${HOST}:3000/api/lendings/admin/pending-returns`, {
+            //     headers: {
+            //         'Authorization': `Bearer ${token}`
+            //     }
+            // });
+            const response = await axios.get(`${HOST}:3000/api/lendings/admin/pending-returns`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
+
             console.log('Return requests fetched:', response.data);
 
             renderReturnRequests(response.data);
@@ -80,7 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Processing return request ${lendingId} with action: ${action}`);
 
         try {
-            const response = await axios.put(`http://localhost:3000/api/lendings/admin/process-return/${lendingId}`,
+            // const response = await axios.put(`http://${HOST}:3000/api/lendings/admin/process-return/${lendingId}`,
+            //     { action: action },
+            //     { headers: { 'Authorization': `Bearer ${token}` } }
+            // );
+            const response = await axios.put(`${HOST}:3000/api/lendings/admin/process-return/${lendingId}`,
                 { action: action },
                 { headers: { 'Authorization': `Bearer ${token}` } }
             );
@@ -110,7 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Fetch and Display All Books ---
     async function fetchAndDisplayBooks() {
         try {
-            const response = await axios.get('http://localhost:3000/api/books/', {
+            // const response = await axios.get('http://${HOST}:3000/api/books/', {
+            //     headers: { 'Authorization': `Bearer ${token}` }
+            // });
+              const response = await axios.get('${HOST}:3000/api/books/', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             console.log('Books fetched:', response.data.books);
@@ -149,7 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
             description: document.getElementById('description').value,
         };
         try {
-            let res = await axios.post('http://localhost:3000/api/books/', bookData, {
+            // let res = await axios.post('http://${HOST}:3000/api/books/', bookData, {
+            //     headers: { 'Authorization': `Bearer ${token}` }
+            // });
+            let res = await axios.post('${HOST}:3000/api/books/', bookData, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             console.log('Book added:', res.data);
@@ -170,7 +190,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const bookId = e.target.dataset.bookId;
             if (confirm(`Are you sure you want to delete this book (ID: ${bookId})?`)) {
                 try {
-                    let res = await axios.delete(`http://localhost:3000/api/books/${bookId}`, {
+                    // let res = await axios.delete(`http://${HOST}:3000/api/books/${bookId}`, {
+                    //     headers: { 'Authorization': `Bearer ${token}` }
+                    // });
+                     let res = await axios.delete(`${HOST}:3000/api/books/${bookId}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     console.log('Book deleted:', res.data);

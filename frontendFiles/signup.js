@@ -1,5 +1,6 @@
-let HOST = 'localhost';
-// let HOST = '16.16.201.152';
+console.log('signup.js loaded');
+// const HOST = 'localhost';
+const HOST = '';
 
 console.log('signup.js loaded');
 document.getElementById('signupForm').addEventListener('submit', function (event) {
@@ -50,7 +51,8 @@ async function submitData() {
             password: password,
         }
         try {
-            const response = await axios.post(`http://${HOST}:3000/api/users/register`, obj);
+            // const response = await axios.post(`http://${HOST}:3000/api/users/register`, obj);
+            const response = await axios.post(`${HOST}:3000/api/users/register`, obj);
 
             console.log('data added');
             console.log('response data = ' + JSON.stringify(response));

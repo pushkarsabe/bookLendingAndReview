@@ -1,4 +1,6 @@
 console.log('bookDetail.js loaded');
+// const HOST = 'localhost';
+const HOST = '';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -36,7 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchLendingDetails() {
         try {
-            const response = await axios.get(`http://localhost:3000/api/lendings/${lendingId}`, {
+            // const response = await axios.get(`http://${HOST}:3000/api/lendings/${lendingId}`, {
+            //     headers: { 'Authorization': `Bearer ${authToken}` }
+            // });
+            const response = await axios.get(`${HOST}:3000/api/lendings/${lendingId}`, {
                 headers: { 'Authorization': `Bearer ${authToken}` }
             });
             const lendingData = response.data;
@@ -59,7 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         try {
-            const response = await axios.put(`http://localhost:3000/api/lendings/extend/${lendingId}`, {}, {
+            // const response = await axios.put(`http://${HOST}:3000/api/lendings/extend/${lendingId}`, {}, {
+            //     headers: { 'Authorization': `Bearer ${authToken}` }
+            // });
+            const response = await axios.put(`${HOST}:3000/api/lendings/extend/${lendingId}`, {}, {
                 headers: { 'Authorization': `Bearer ${authToken}` }
             });
             console.log('Extension response:', response.data);
@@ -106,7 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchReviews() {
         if (!actualBookId) return;
         try {
-            const response = await axios.get(`http://localhost:3000/api/books/${actualBookId}/reviews`, {
+            // const response = await axios.get(`http://${HOST}:3000/api/books/${actualBookId}/reviews`, {
+            //     headers: { 'Authorization': `Bearer ${authToken}` }
+            // });
+            const response = await axios.get(`${HOST}:3000/api/books/${actualBookId}/reviews`, {
                 headers: { 'Authorization': `Bearer ${authToken}` }
             });
             console.log('Fetched reviews:', response.data);
@@ -124,7 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!actualBookId) return;
         try {
-            await axios.post(`http://localhost:3000/api/books/${actualBookId}/review`,
+            // await axios.post(`http://${HOST}:3000/api/books/${actualBookId}/review`,
+            //     { comment: reviewText },
+            //     { headers: { 'Authorization': `Bearer ${authToken}` } }
+            // );
+            await axios.post(`${HOST}:3000/api/books/${actualBookId}/review`,
                 { comment: reviewText },
                 { headers: { 'Authorization': `Bearer ${authToken}` } }
             );
@@ -212,7 +227,10 @@ document.addEventListener('DOMContentLoaded', () => {
     async function requestBookReturn() {
         if (!confirm('Are you sure you want to request to return this book?')) return;
         try {
-            const response = await axios.put(`http://localhost:3000/api/lendings/return-request/${lendingId}`, {}, {
+            // const response = await axios.put(`http://${HOST}:3000/api/lendings/return-request/${lendingId}`, {}, {
+            //     headers: { 'Authorization': `Bearer ${authToken}` }
+            // });
+            const response = await axios.put(`${HOST}:3000/api/lendings/return-request/${lendingId}`, {}, {
                 headers: { 'Authorization': `Bearer ${authToken}` }
             });
             console.log('Return request response:', response.data);

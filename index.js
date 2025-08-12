@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'frontendFiles')));
 
 const User = require('./model/User');
 const Book = require('./model/Book');
-const Lending = require('./model/Lending');
+const Lending = require('./model/Lending'); 
 const Review = require('./model/Review');
 
 app.use('/api/users', userRoutes);

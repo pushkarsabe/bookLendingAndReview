@@ -1,6 +1,7 @@
-//local variables
-const HOST = 'localhost';
+
 console.log('login.js loaded');
+// const HOST = 'localhost';
+const HOST = '';
 
 document.getElementById('loginForm').addEventListener('submit', function (event) {
     event.preventDefault();
@@ -51,7 +52,8 @@ async function submitData() {
         }
 
         try {
-            const response = await axios.post(`http://${HOST}:3000/api/users/login`, obj);
+            // const response = await axios.post(`http://${HOST}:3000/api/users/login`, obj);
+            const response = await axios.post(`${HOST}:3000/api/users/login`, obj);
             console.log('response data = ', response.data);
 
             const { token, userData } = response.data;

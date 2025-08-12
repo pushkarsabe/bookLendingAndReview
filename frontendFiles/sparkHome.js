@@ -1,11 +1,13 @@
-// In frontendFiles/sparkHome.js
+console.log('sparkHome.js loaded');
+// const HOST = 'localhost';
+const HOST = '';
 
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const booksGrid = document.getElementById('booksGrid');
     const searchInput = document.getElementById('searchInput');
     const profileIcon = document.getElementById('profileIcon');
-    const myBooksGrid = document.getElementById('myBooksGrid'); 
+    const myBooksGrid = document.getElementById('myBooksGrid');
 
     let allBooks = []; // To store all fetched books
 
@@ -41,7 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const response = await axios.get('http://localhost:3000/api/books/', {
+            // const response = await axios.get(`http://${HOST}:3000/api/books/`, {
+            //     headers: { 'Authorization': `Bearer ${token}` }
+            // });
+            const response = await axios.get(`${HOST}:3000/api/books/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             console.log('Books fetched successfully:', response.data);
@@ -107,7 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
     async function borrowBook(bookId, cardElement) {
         cardElement.style.opacity = '0.5';
         try {
-            await axios.post('http://localhost:3000/api/lendings/borrow', { book_id: bookId }, {
+            // await axios.post(`http://${HOST}:3000/api/lendings/borrow`, { book_id: bookId }, {
+            //     headers: { 'Authorization': `Bearer ${token}` }
+            // });
+            await axios.post(`${HOST}:3000/api/lendings/borrow`, { book_id: bookId }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             alert('Book borrowed successfully! It will now appear in your "My Books" section.');
@@ -131,8 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             myBooksGrid.innerHTML = ''; // Clear existing content
+
             // Fetch user's borrowed books
-            const response = await axios.get('http://localhost:3000/api/lendings', {
+            // const response = await axios.get(`http://${HOST}:3000/api/lendings`, {
+            //     headers: { 'Authorization': `Bearer ${token}` }
+            // });
+            const response = await axios.get(`${HOST}:3000/api/lendings`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             displayMyBooks(response.data);
