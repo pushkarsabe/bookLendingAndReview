@@ -1,6 +1,6 @@
 console.log('Admin script loaded.');
-// const HOST = 'http://localhost:3000'; // Change this to your actual host URL
-const HOST = 'https://book-lending-and-review.onrender.com';
+const HOST = 'http://localhost:3000'; // Change this to your actual host URL
+// const HOST = 'https://book-lending-and-review.onrender.com';
 
 
 function decodeJwt(token) {
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // let res = await axios.delete(`http://${HOST}:3000/api/books/${bookId}`, {
                     //     headers: { 'Authorization': `Bearer ${token}` }
                     // });
-                    let res = await axios.delete(`${HOST}/api/books/${bookId}`, {
+                      let res = await axios.delete(`${HOST}/api/books/${bookId}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     console.log('Book deleted:', res.data);

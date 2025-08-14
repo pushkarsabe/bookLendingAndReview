@@ -3,9 +3,11 @@ const Book = require('../model/Book'); // Use the central export from model/inde
 // Get all books
 exports.getAllBooks = async (req, res) => {
     try {
-        console.log('Fetching all books...');
+        console.log('Fetching all books...', req.user.id);
 
         const books = await Book.findAll();
+        console.log(`Total books fetched: `, books);
+
         res.status(200).json({ message: 'Books fetched successfully', books: books });
 
     } catch (error) {

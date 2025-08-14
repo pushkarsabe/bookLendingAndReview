@@ -20,7 +20,7 @@ const Book = sequelize.define('Book', {
         type: DataTypes.STRING,
     },
     status: {
-        type: DataTypes.ENUM('available', 'borrowed', 'overdue', 'reserved'),
+        type: DataTypes.ENUM('available', 'borrowed', 'overdue',),
         allowNull: false,
         defaultValue: 'available',
     },

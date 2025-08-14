@@ -25,12 +25,12 @@ const Review = require('./model/Review');
 
 app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
-app.use('/api/lendings', lendingRoutes);
+    app.use('/api/lendings', lendingRoutes);
 
 // A simple route to serve the main page
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontendFiles', 'index.html'));
-});
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'frontendFiles', 'index.html'));
+// });
 
 
 // When a User is deleted, their Lending records are also deleted.
