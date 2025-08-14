@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config(); 
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -20,12 +20,12 @@ app.use(express.static(path.join(__dirname, 'frontendFiles')));
 
 const User = require('./model/User');
 const Book = require('./model/Book');
-const Lending = require('./model/Lending'); 
+const Lending = require('./model/Lending');
 const Review = require('./model/Review');
 
 app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
-    app.use('/api/lendings', lendingRoutes);
+app.use('/api/lendings', lendingRoutes);
 
 // A simple route to serve the main page
 // app.get('/', (req, res) => {

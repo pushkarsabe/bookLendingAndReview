@@ -25,6 +25,20 @@ function decodeJwt(token) {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded and parsed');
+    const signOutBtn = document.getElementById('signOutBtn');
+    if (signOutBtn) {
+        signOutBtn.addEventListener('click', () => {
+            console.log('Signing out...');
+            // Remove JWT from local storage
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            // Redirect to the login page
+            window.location.href = '/index.html';
+        });
+    }
+
+    // Check if the user is logged in and is an admin   
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
     console.log('User:', user);
@@ -194,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // let res = await axios.delete(`http://${HOST}:3000/api/books/${bookId}`, {
                     //     headers: { 'Authorization': `Bearer ${token}` }
                     // });
-                      let res = await axios.delete(`${HOST}/api/books/${bookId}`, {
+                    let res = await axios.delete(`${HOST}/api/books/${bookId}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     console.log('Book deleted:', res.data);

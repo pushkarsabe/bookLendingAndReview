@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (signOutBtn) {
             signOutBtn.addEventListener('click', () => {
                 localStorage.removeItem('token');
-                // Redirect to the login page or homepage
+                localStorage.removeItem('user');
+                console.log('User signed out. Redirecting to login page.');
                 window.location.href = './index.html';
             });
         }

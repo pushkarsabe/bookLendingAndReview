@@ -2,6 +2,7 @@ const Lending = require('../model/Lending');
 const Book = require('../model/Book');
 const User = require('../model/User');
 const sequelize = require('../util/database');
+const sendBookReturnEmail = require('../config/emailService');
 
 exports.borrowBook = async (req, res) => {
     const t = await sequelize.transaction();
@@ -222,7 +223,13 @@ exports.processReturn = async (req, res) => {
     const t = await sequelize.transaction();
 
     try {
-        const lending = await Lending.findByPk(lendingId, { transaction: t });
+        const lending = await Lending.findByPk(lendingId, {
+            transaction: t,
+            include: [
+                { model: Book, attributes: ['title'] },
+                { model: User, attributes: ['name', 'email'] }
+            ]
+        });
         console.log('Lending record found:', lending ? lending.toJSON() : 'Not found');
 
         if (!lending || lending.return_status !== 'return_pending') {
@@ -250,6 +257,14 @@ exports.processReturn = async (req, res) => {
             await t.rollback();
             return res.status(400).json({ message: 'Invalid action specified.' });
         }
+
+        if (lending.User && lending.Book) {
+            console.log('User and Book found for email:', lending.User.toJSON(), lending.Book.toJSON());
+            await sendBookReturnEmail(lending.User.email, lending.User.name, lending.Book.title, action);
+        } else {
+            console.error('Eager loading failed. User or Book not available for email.');
+        }
+
 
         await t.commit();
         res.status(200).json({ message: `Return request has been successfully ${action}d.` });

@@ -1,3 +1,197 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.site-header {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    /* Aligns content and profile to opposite ends */
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-content h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.home-link {
+    color: #3498db;
+    text-decoration: none;
+    margin-left: 2rem;
+    font-weight: 500;
+}
+
+/* New CSS for the user profile and sign out button */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-icon {
+    font-size: 2.5rem;
+    /* Larger icon size */
+    color: #f1c40f;
+    /* A color that stands out */
+}
+
+.signout-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.signout-btn:hover {
+    background-color: #c0392b;
+}
+
+.page-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.admin-section {
+    background-color: #ffffff;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.admin-section h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+#addBookForm input,
+#addBookForm textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #3498db;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+/* Book list styling */
+#bookListContainer {
+    display: grid;
+    gap: 1rem;
+}
+
+.book-card {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-left: 5px solid #34495e;
+    border-radius: 4px;
+    position: relative;
+}
+
+.book-card h4 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.book-card p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.book-status {
+    font-weight: bold;
+}
+
+.status-available {
+    color: #2ecc71;
+}
+
+.status-borrowed {
+    color: #e74c3c;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: #e74c3c;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    color: #c0392b;
+}
+
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.site-footer-admin {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #2c3e50;
+    color: #bdc3c7;
+}
+
+.site-footer-admin p {
+    margin: 0;
+}
+
+
 .site-header {
     padding: 1rem 2rem;
     color: white;
