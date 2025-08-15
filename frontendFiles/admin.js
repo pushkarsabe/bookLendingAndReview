@@ -81,7 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderReturnRequests(requests) {
         console.log('Rendering return requests:', requests);
 
-        if (requests.length === 0) {
+        if (requests.length === 0 || !Array.isArray(requests)) {
+            console.log('No pending return requests to display.');
             returnRequestsContainer.innerHTML = "<p>No pending return requests.</p>";
             return;
         }
@@ -99,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             list.appendChild(item);
         });
-    }
+    }// renderReturnRequests
 
     async function processBookReturn(lendingId, action) {
         console.log(`Processing return request ${lendingId} with action: ${action}`);

@@ -196,7 +196,7 @@ exports.getPendingReturns = async (req, res) => {
         });
         console.log(`Found pending return requests.`, requests);
         if (requests.length === 0) {
-            return res.status(404).json({ message: 'No pending return requests found.' });
+            return res.status(201).json({ message: 'No pending return requests found.' });
         }
 
         res.status(200).json(requests);

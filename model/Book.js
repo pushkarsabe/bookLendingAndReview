@@ -24,6 +24,10 @@ const Book = sequelize.define('Book', {
         allowNull: false,
         defaultValue: 'available',
     },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    }
 });
 
 module.exports = Book;

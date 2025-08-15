@@ -5,8 +5,10 @@ exports.getAllBooks = async (req, res) => {
     try {
         console.log('Fetching all books...', req.user.id);
 
-        const books = await Book.findAll();
-        console.log(`Total books fetched: `, books);
+        const books = await Book.findAll({
+            where: { isDeleted: false }, // Only fetch books that are not deleted
+        });
+        console.log(`Total books fetched: `, books.length);
 
         res.status(200).json({ message: 'Books fetched successfully', books: books });
 
@@ -14,7 +16,6 @@ exports.getAllBooks = async (req, res) => {
         res.status(500).json({ message: 'Error fetching books', error: error.message });
     }
 };
-
 
 
 exports.getBookById = async (req, res) => {
@@ -69,6 +70,7 @@ exports.deleteBook = async (req, res) => {
     try {
         const { bookId } = req.params;
         console.log('Deleting book with ID:', req.params.bookId);
+
         if (!bookId) {
             return res.status(400).json({ message: 'Book ID is required.' });
         }
@@ -77,9 +79,11 @@ exports.deleteBook = async (req, res) => {
         if (!book) {
             return res.status(404).json({ message: 'Book not found.' });
         }
-        console.log('Book found:', book);
+        console.log('Book before:', book);
+        book.isDeleted = true;
+        await book.save();
+        console.log('Book after deletion:', book);
 
-        await book.destroy();
         res.status(200).json({ message: 'Book deleted successfully.' });
 
     } catch (error) {
