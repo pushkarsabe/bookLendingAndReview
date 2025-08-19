@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const myBooksGrid = document.getElementById('myBooksGrid');
     const overdueBooksGrid = document.getElementById('overdueBooksGrid');
 
-    let allBooks = []; // To store all fetched books
+    let allBooks = []; // To store all fetched books  
 
     if (!token) {
         window.location.href = './index.html';
