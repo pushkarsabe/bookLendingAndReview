@@ -2,7 +2,7 @@ const Lending = require('../model/Lending');
 const Book = require('../model/Book');
 const User = require('../model/User');
 const sequelize = require('../util/database');
-const sendBookReturnEmail = require('../config/emailService');
+const { sendBookReturnEmail, sendOverdueReminderEmail } = require('../config/emailService');
 const { Op } = require('sequelize');
 
 exports.borrowBook = async (req, res) => {
@@ -122,7 +122,7 @@ exports.getOverdueBooks = async (req, res) => {
                 attributes: ['title', 'author', 'genre']
             }]
         });
-        console.log(`overdue books ${lendings}  for User ID: ${user_id}`);
+        console.log("found overdue books:", lendings);
 
         if (!lendings) {
             return res.status(404).json({ message: 'No overdue books found.' });

@@ -116,4 +116,7 @@ const sendOverdueReminderEmail = async (recipientEmail, userName, bookTitle, due
     }
 };
 
-module.exports = sendBookReturnEmail;
+module.exports = {
+    sendBookReturnEmail,
+    sendOverdueReminderEmail
+};

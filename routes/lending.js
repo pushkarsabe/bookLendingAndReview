@@ -9,12 +9,11 @@ router.post('/borrow', authMiddleware, lendingController.borrowBook);
 // GET /api/lendings - Get all of the user's borrowed books
 router.get('/', authMiddleware, lendingController.getMyBorrowedBooks);
 
-// GET /api/lendings/:lendingId - Get details of a specific borrowed book
-// We will use 'lendingId' consistently as our parameter name.
-router.get('/:lendingId', authMiddleware, lendingController.getLendingDetails);
-
 // GET /api/lendings/overdue - Get all of the user's overdue books
 router.get('/overdue', authMiddleware, lendingController.getOverdueBooks);
+
+// GET /api/lendings/:lendingId - Get details of a specific borrowed book
+router.get('/:lendingId', authMiddleware, lendingController.getLendingDetails);
 
 // PUT /api/lendings/extend/:lendingId - Request a 7-day extension
 router.put('/extend/:lendingId', authMiddleware, lendingController.requestExtension);

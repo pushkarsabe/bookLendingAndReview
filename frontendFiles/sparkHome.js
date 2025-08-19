@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
-            console.log('Overdue books fetched successfully:', JSON.stringify(response));
+            console.log('Overdue books fetched successfully:',response.data);
 
             if (response.data.length === 0) {
                 overdueBooksGrid.innerHTML = '<p>You have no overdue books.</p>';
