@@ -1,6 +1,6 @@
 console.log('sparkHome.js loaded');
-// const HOST = 'http://localhost:3000';    
-const HOST = 'https://book-lending-and-review.onrender.com';
+const HOST = 'http://localhost:3000';
+// const HOST = 'https://book-lending-and-review.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const profileIcon = document.getElementById('signOutBtn');
     const myBooksGrid = document.getElementById('myBooksGrid');
+    const overdueBooksGrid = document.getElementById('overdueBooksGrid');
 
     let allBooks = []; // To store all fetched books
 
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     fetchAndDisplayBooks();
     fetchAndDisplayMyBooks();
+    fetchAndDisplayOverdueBooks();
 
     profileIcon.addEventListener('click', () => {
         localStorage.removeItem('token');
@@ -179,12 +181,69 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // --- NEW: Click listener for "My Books" grid ---
     myBooksGrid.addEventListener('click', (e) => {
         const card = e.target.closest('.my-book-card');
         if (card) {
             const lendingId = card.dataset.lendingId;
             // Navigate to the new detail page with the lending ID
+            window.location.href = `./book.html?lendingId=${lendingId}`;
+        }
+    });
+
+
+    async function fetchAndDisplayOverdueBooks() {
+        console.log('Fetching overdue books');
+        try {
+            let token = localStorage.getItem('token');
+            if (!token) {
+                return;
+            }
+            overdueBooksGrid.innerHTML = '';
+
+            const response = await axios.get(`${HOST}/api/lendings/overdue`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            console.log('Overdue books fetched successfully:', JSON.stringify(response));
+
+            if (response.data.length === 0) {
+                overdueBooksGrid.innerHTML = '<p>You have no overdue books.</p>';
+                return;
+            }
+
+            displayOverdueBooks(response.data);
+        } catch (error) {
+            console.error('Failed to fetch overdue books:', error);
+            overdueBooksGrid.innerHTML = '<p>Could not load your overdue books.</p>';
+        }
+    }//fetchAndDisplayOverdueBooks
+
+    function displayOverdueBooks(lendings) {
+        console.log('Displaying overdue books:', lendings);
+
+        overdueBooksGrid.innerHTML = '';
+        if (lendings.length === 0) {
+            overdueBooksGrid.innerHTML = '<p>You have no overdue books.</p>';
+            return;
+        }
+
+        lendings.forEach(lending => {
+            const card = document.createElement('div');
+            card.className = 'my-book-card overdue'; // Add a class for styling
+            card.dataset.lendingId = lending.lending_id;
+
+            card.innerHTML = `
+                <h4>${lending.Book.title}</h4>
+                <span class="genre">${new Date(lending.due_date).toLocaleDateString()}</span>
+            `;
+            overdueBooksGrid.appendChild(card);
+        });
+    }// displayOverdueBooks
+
+    overdueBooksGrid.addEventListener('click', (e) => {
+        const card = e.target.closest('.my-book-card');
+        if (card) {
+            const lendingId = card.dataset.lendingId;
             window.location.href = `./book.html?lendingId=${lendingId}`;
         }
     });

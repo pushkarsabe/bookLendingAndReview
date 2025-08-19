@@ -3,6 +3,7 @@ const Book = require('../model/Book');
 const User = require('../model/User');
 const sequelize = require('../util/database');
 const sendBookReturnEmail = require('../config/emailService');
+const { Op } = require('sequelize');
 
 exports.borrowBook = async (req, res) => {
     const t = await sequelize.transaction();
@@ -86,7 +87,7 @@ exports.getLendingDetails = async (req, res) => {
         console.log('Found lending record:', lending);
 
         if (!lending) {
-            return res.status(404).json({ message: 'Lending record not found.' });
+            return res.status(204).json({ message: 'Lending record not found.' });
         }
 
         // Security check: Make sure the logged-in user is the one who borrowed the book
@@ -102,11 +103,41 @@ exports.getLendingDetails = async (req, res) => {
     }
 };
 
+// GET a user's overdue books
+exports.getOverdueBooks = async (req, res) => {
+    try {
+        const user_id = req.user.id;
+        console.log(`getOverdueBooks Fetching overdue books for User ID: ${user_id}`);
+
+        const lendings = await Lending.findAll({
+            where: {
+                user_id: user_id,
+                returned_date: null,
+                due_date: {
+                    [Op.lt]: new Date() // Check if the due date is in the past
+                }
+            },
+            include: [{
+                model: Book,
+                attributes: ['title', 'author', 'genre']
+            }]
+        });
+        console.log(`overdue books ${lendings}  for User ID: ${user_id}`);
+
+        if (!lendings) {
+            return res.status(404).json({ message: 'No overdue books found.' });
+        }
+
+        res.status(200).json(lendings);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching overdue books', error: error.message });
+    }
+};
 
 exports.requestExtension = async (req, res) => {
     try {
         const { lendingId } = req.params;
-        console.log(`[Extension] Received request for Lending ID: ${lendingId}`);
+        console.log(` requestExtension = [Extension] Received request for Lending ID: ${lendingId}`);
 
         // Step 1: Find the lending record
         const lending = await Lending.findByPk(lendingId);

@@ -13,6 +13,9 @@ router.get('/', authMiddleware, lendingController.getMyBorrowedBooks);
 // We will use 'lendingId' consistently as our parameter name.
 router.get('/:lendingId', authMiddleware, lendingController.getLendingDetails);
 
+// GET /api/lendings/overdue - Get all of the user's overdue books
+router.get('/overdue', authMiddleware, lendingController.getOverdueBooks);
+
 // PUT /api/lendings/extend/:lendingId - Request a 7-day extension
 router.put('/extend/:lendingId', authMiddleware, lendingController.requestExtension);
 

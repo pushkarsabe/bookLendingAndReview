@@ -1,6 +1,6 @@
 console.log('bookDetail.js loaded');
-// const HOST = 'http://localhost:3000';
-const HOST = 'https://book-lending-and-review.onrender.com';
+const HOST = 'http://localhost:3000';
+// const HOST = 'https://book-lending-and-review.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -43,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function fetchLendingDetails() {
+        console.log('Fetching lending details inside books page for ID:', lendingId);
+
         try {
             // const response = await axios.get(`http://${HOST}:3000/api/lendings/${lendingId}`, {
             //     headers: { 'Authorization': `Bearer ${authToken}` }
@@ -62,10 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to fetch lending details:', error);
             bookDetailContainer.innerHTML = `<p style="color:red;">Could not load book details.</p>`;
         }
-    }
+    }// fetchLendingDetails
 
-    // --- CHANGE 1: ADD THE NEW FUNCTION TO REQUEST AN EXTENSION ---
     async function requestExtension() {
+        console.log('Requesting extension on books page for lending ID :', lendingId);
+
         if (!confirm('Are you sure you want to request a 7-day extension?')) {
             return;
         }
@@ -80,11 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(response.data.message);
             // Refresh the details to show the new due date
             fetchLendingDetails();
+
         } catch (error) {
             console.error('Failed to request extension:', error);
             alert(error.response?.data?.message || 'An error occurred while requesting the extension.');
         }
-    }
+    }// requestExtension
 
     function renderBookAndLendingDetails(lending) {
         console.log('Rendering book and lending details:', lending);
@@ -107,17 +111,15 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        // --- CHANGE 3: ADD THE EVENT LISTENER FOR THE NEW BUTTON ---
-        // We must do this *after* setting the innerHTML
         const extendButton = document.getElementById('extend-btn');
         if (extendButton) {
             extendButton.addEventListener('click', requestExtension);
         }
-    }
+    }// renderBookAndLendingDetails
 
-    // ... No changes needed to the rest of your functions ...
-    // (fetchReviews, postReview, renderReviewSection, etc.)
     async function fetchReviews() {
+        console.log('Fetching reviews on books page for book ID:', actualBookId);
+
         if (!actualBookId) return;
         try {
             // const response = await axios.get(`http://${HOST}:3000/api/books/${actualBookId}/reviews`, {
@@ -134,10 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to fetch reviews:', error);
             otherReviewsList.innerHTML = `<p style="color:red;">Could not load reviews.</p>`;
         }
-    }
+    }// fetchReviews
 
     async function postReview(rating, reviewText) {
-        console.log('Posting review:', { rating, reviewText });
+        console.log('books page Posting review:', { rating, reviewText });
 
         if (!actualBookId) return;
         try {
@@ -154,10 +156,10 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error saving review:', error);
             alert('Error saving review. Please try again.');
         }
-    }
+    }// postReview
 
     function renderReviewSection(reviews) {
-        console.log('Rendering reviews:', reviews);
+        console.log('Books page Rendering reviews:', reviews);
 
         const userReview = reviews.find(review => review.user_id === currentUser.id);
         const otherReviews = reviews.filter(review => review.user_id !== currentUser.id);
@@ -189,9 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             otherReviewsList.innerHTML = '<p>Be the first to leave a review!</p>';
         }
-    }
+    }// renderReviewSection
 
     function renderUserReview(review) {
+        console.log('Rendering user review:', review);
         const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
         userReviewArea.innerHTML = `
         <div class="review-card user-review">
@@ -204,9 +207,10 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     `;
         document.getElementById('edit-review-btn').addEventListener('click', () => renderEditReviewForm(review));
-    }
+    }// renderUserReview
 
     function renderAddReviewForm() {
+        console.log('Rendering add review form');
         userReviewArea.innerHTML = `
         <h3>Add Your Review</h3>
         <form id="review-form">
@@ -249,6 +253,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleFormSubmit(event) {
+        console.log('Books page Handling form submission...');
+        
         event.preventDefault();
         console.log(`Handling form submission...`);
         // --- CHANGE: Get the selected rating value ---
@@ -267,12 +273,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         postReview(rating.value, reviewText);
-    }
+    }// handleFormSubmit
 
     fetchLendingDetails();
 
 
     async function requestBookReturn() {
+        console.log('Books page Requesting return for lending ID:', lendingId);
+
         if (!confirm('Are you sure you want to request to return this book?')) return;
         try {
             // const response = await axios.put(`http://${HOST}:3000/api/lendings/return-request/${lendingId}`, {}, {
@@ -293,6 +301,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function renderBookAndLendingDetails(lending) {
+        console.log('Books page Rendering book and lending details:', lending);
+
         const dueDate = new Date(lending.due_date).toLocaleDateString('en-US', {
             year: 'numeric', month: 'long', day: 'numeric'
         });

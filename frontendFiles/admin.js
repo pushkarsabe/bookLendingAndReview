@@ -1,6 +1,6 @@
 console.log('Admin script loaded.');
-// const HOST = 'http://localhost:3000'; // Change this to your actual host URL
-const HOST = 'https://book-lending-and-review.onrender.com';
+const HOST = 'http://localhost:3000'; // Change this to your actual host URL
+// const HOST = 'https://book-lending-and-review.onrender.com';
 
 
 function decodeJwt(token) {
