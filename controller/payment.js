@@ -1,4 +1,8 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const sequelize = require('../util/database');
+const Book = require('../model/Book');
+const Lending = require('../model/Lending');
+const Transaction = require('../model/Transaction');
 
 exports.createCheckoutSession = async (req, res) => {
     console.log('Creating checkout session for stripe payment');
@@ -32,7 +36,7 @@ exports.createCheckoutSession = async (req, res) => {
 // B. CREATE THE WEBHOOK HANDLER
 exports.handleStripeWebhook = async (req, res) => {
     console.log('Handling Stripe webhook event');
-    
+
     const sig = req.headers['stripe-signature'];
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 

@@ -8,6 +8,7 @@ const sequelize = require('./util/database');
 const userRoutes = require('./routes/user');
 const bookRoutes = require('./routes/book');
 const lendingRoutes = require('./routes/lending');
+const paymentRoutes = require('./routes/payment'); //
 
 const app = express();
 
@@ -26,7 +27,7 @@ const Transaction = require('./model/Transaction');
 
 app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
-app.use('/api/lendings', lendingRoutes);
+app.use('/api/lendings', lendingRoutes);// 2. USE THE PAYMENT ROUTE
 
 // A simple route to serve the main page
 app.get('/', (req, res) => {

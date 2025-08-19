@@ -114,42 +114,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Helper function for borrowing
-    async function borrowBook(bookId, cardElement, price) {
+    async function borrowBook(bookId, bookTitle, price) {
         console.log('Borrowing book with ID:', bookId, 'and price of:', price);
 
-        // cardElement.style.opacity = '0.5';
         try {
-            // await axios.post(`http://${HOST}:3000/api/lendings/borrow`, { book_id: bookId }, {
-            //     headers: { 'Authorization': `Bearer ${token}` }
-            // });
-            await axios.post(`${HOST}/api/payments/create-checkout-session`,
+            const response = await axios.post(`${HOST}/api/payments/create-checkout-session`,
                 {
-                    book_id: bookId,
+                    bookId: bookId,
                     bookTitle: bookTitle,
-                    price: 200
+                    price: price
                 },
                 {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-            // alert('Book borrowed successfully! It will now appear in your "My Books" section.');
+
             const session = response.data;
             console.log('Checkout session created:', session);
 
+            // This part should now work correctly
             const result = await stripe.redirectToCheckout({
                 sessionId: session.id,
             });
+
             if (result.error) {
                 alert(result.error.message);
             }
 
-            fetchAndDisplayBooks(); // Refresh main library
-            fetchAndDisplayMyBooks(); // Refresh user's library
         } catch (error) {
-            // alert(error.response?.data?.message || 'Failed to borrow book.');
-            // cardElement.style.opacity = '1';
-            alert('Failed to initiate payment.');
+            console.error("Payment initiation error:", error);
+            alert('Failed to initiate payment. Check the console for details.');
         }
-    }
+    }// borrowBook
 
     // Fetch and display user's borrowed books ---
     async function fetchAndDisplayMyBooks() {
