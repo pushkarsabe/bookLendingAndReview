@@ -1,4 +1,4 @@
-require('dotenv').config(); 
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -22,6 +22,7 @@ const User = require('./model/User');
 const Book = require('./model/Book');
 const Lending = require('./model/Lending');
 const Review = require('./model/Review');
+const Transaction = require('./model/Transaction');
 
 app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
@@ -49,7 +50,9 @@ Review.belongsTo(User, { foreignKey: 'user_id' });
 Book.hasMany(Review, { foreignKey: 'book_id', onDelete: 'CASCADE' });
 Review.belongsTo(Book, { foreignKey: 'book_id' });
 
-
+// A Lending record has one Transaction
+Lending.hasOne(Transaction, { foreignKey: 'lending_id' });
+Transaction.belongsTo(Lending, { foreignKey: 'lending_id' });
 
 // Sync database and start server
 let connectToDB = async () => {

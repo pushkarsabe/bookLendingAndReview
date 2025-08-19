@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Successful</title>
+</head>
+
+<body>
+    <h1>Payment Successful!</h1>
+    <p>Thank you for borrowing the book. You will be redirected shortly.</p>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('Books page Payment successful script loaded.');
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = urlParams.get('book_id');
+            const token = localStorage.getItem('token');
+
+            if (bookId && token) {
+                try {
+                    let result = await axios.post('http://localhost:3000/api/lendings/borrow', { book_id: bookId }, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    console.log('Books page Payment successful response:', result.data);
+                    alert('Payment was successful! Your book has been borrowed.');
+                   
+                    setTimeout(() => {
+                        window.location.href = './sparkHome.html';
+                    }, 3000);
+                } catch (error) {
+                    console.error('Failed to update book status:', error);
+                    alert('Payment was successful, but there was an error updating the book status. Please contact support.');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

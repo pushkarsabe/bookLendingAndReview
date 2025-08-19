@@ -1,6 +1,7 @@
 console.log('sparkHome.js loaded');
 const HOST = 'http://localhost:3000';
 // const HOST = 'https://book-lending-and-review.onrender.com';
+const stripe = Stripe('pk_test_51RxqRTDSo6S9zGwsVfw15sTHQIz0zJhL83088Ucijqeg7oQF4jrqPdor2PaGFgmy2N2hBWnkyS1f61HbenOcc1QL00D8PnGwsm');
 
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
@@ -103,30 +104,50 @@ document.addEventListener('DOMContentLoaded', () => {
     booksGrid.addEventListener('click', async (e) => {
         // Check if the clicked element is a borrow button and is not disabled
         if (e.target.classList.contains('borrow-btn') && !e.target.disabled) {
-            if (window.confirm('Are you sure you want to borrow this book?')) {
-                const bookId = e.target.dataset.bookId;
-                await borrowBook(bookId, e.target);
-            }
+            const bookId = e.target.dataset.bookId;
+            const bookTitle = e.target.closest('.book-card').querySelector('h3').innerText;
+            const price = 200; // Example price: $2.00 (200 cents)
+
+            await borrowBook(bookId, bookTitle, price);
         }
     });
 
 
     // Helper function for borrowing
-    async function borrowBook(bookId, cardElement) {
-        cardElement.style.opacity = '0.5';
+    async function borrowBook(bookId, cardElement, price) {
+        console.log('Borrowing book with ID:', bookId, 'and price of:', price);
+
+        // cardElement.style.opacity = '0.5';
         try {
             // await axios.post(`http://${HOST}:3000/api/lendings/borrow`, { book_id: bookId }, {
             //     headers: { 'Authorization': `Bearer ${token}` }
             // });
-            await axios.post(`${HOST}/api/lendings/borrow`, { book_id: bookId }, {
-                headers: { 'Authorization': `Bearer ${token}` }
+            await axios.post(`${HOST}/api/payments/create-checkout-session`,
+                {
+                    book_id: bookId,
+                    bookTitle: bookTitle,
+                    price: 200
+                },
+                {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+            // alert('Book borrowed successfully! It will now appear in your "My Books" section.');
+            const session = response.data;
+            console.log('Checkout session created:', session);
+
+            const result = await stripe.redirectToCheckout({
+                sessionId: session.id,
             });
-            alert('Book borrowed successfully! It will now appear in your "My Books" section.');
+            if (result.error) {
+                alert(result.error.message);
+            }
+
             fetchAndDisplayBooks(); // Refresh main library
             fetchAndDisplayMyBooks(); // Refresh user's library
         } catch (error) {
-            alert(error.response?.data?.message || 'Failed to borrow book.');
-            cardElement.style.opacity = '1';
+            // alert(error.response?.data?.message || 'Failed to borrow book.');
+            // cardElement.style.opacity = '1';
+            alert('Failed to initiate payment.');
         }
     }
 
@@ -204,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
-            console.log('Overdue books fetched successfully:',response.data);
+            console.log('Overdue books fetched successfully:', response.data);
 
             if (response.data.length === 0) {
                 overdueBooksGrid.innerHTML = '<p>You have no overdue books.</p>';
