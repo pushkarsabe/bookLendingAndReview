@@ -1,6 +1,6 @@
 console.log('signup.js loaded');
-const HOST = 'http://localhost:3000';
-// const HOST = 'https://book-lending-and-review.onrender.com';
+// const HOST = 'http://localhost:3000';
+const HOST = 'https://book-lending-and-review.onrender.com';
 
 console.log('signup.js loaded');
 document.getElementById('signupForm').addEventListener('submit', function (event) {

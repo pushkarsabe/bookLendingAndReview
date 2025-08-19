@@ -13,8 +13,19 @@ exports.createCheckoutSession = async (req, res) => {
 
     try {
         const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
-            line_items: [/* ... */],
+           
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'inr',
+                        product_data: {
+                            name: bookTitle,
+                        },
+                        unit_amount: price, // Price in cents
+                    },
+                    quantity: 1,
+                },
+            ],
             mode: 'payment',
             success_url: `${process.env.FRONTEND_URL}/success.html`,
             cancel_url: `${process.env.FRONTEND_URL}/cancel.html`,

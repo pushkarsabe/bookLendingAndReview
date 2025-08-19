@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Canceled</title>
+</head>
+
+<body>
+    <h1>Payment Canceled</h1>
+    <p>Your payment was not processed. You have not been charged.</p>
+    <p>You will be redirected to the home page shortly.</p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Redirect to the home page after 3 seconds
+            setTimeout(() => {
+                window.location.href = './sparkHome.html';
+            }, 3000);
+        });
+    </script>
+</body>
+
+</html>

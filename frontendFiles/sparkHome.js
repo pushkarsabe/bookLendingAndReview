@@ -1,6 +1,6 @@
 console.log('sparkHome.js loaded');
-const HOST = 'http://localhost:3000';
-// const HOST = 'https://book-lending-and-review.onrender.com';
+// const HOST = 'http://localhost:3000';
+const HOST = 'https://book-lending-and-review.onrender.com';
 const stripe = Stripe('pk_test_51RxqRTDSo6S9zGwsVfw15sTHQIz0zJhL83088Ucijqeg7oQF4jrqPdor2PaGFgmy2N2hBWnkyS1f61HbenOcc1QL00D8PnGwsm');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('borrow-btn') && !e.target.disabled) {
             const bookId = e.target.dataset.bookId;
             const bookTitle = e.target.closest('.book-card').querySelector('h3').innerText;
-            const price = 200; // Example price: $2.00 (200 cents)
+            const price = 20000; // Example price will be : ₹200
 
             await borrowBook(bookId, bookTitle, price);
         }

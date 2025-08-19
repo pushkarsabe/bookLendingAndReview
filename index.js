@@ -27,7 +27,8 @@ const Transaction = require('./model/Transaction');
 
 app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
-app.use('/api/lendings', lendingRoutes);// 2. USE THE PAYMENT ROUTE
+app.use('/api/lendings', lendingRoutes);
+app.use('/api/payments', paymentRoutes); 
 
 // A simple route to serve the main page
 app.get('/', (req, res) => {
