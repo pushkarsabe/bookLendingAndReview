@@ -4,8 +4,8 @@ const paymentController = require('../controller/payment');
 const { authMiddleware } = require('../auth/auth');
 
 // POST /api/payments/create-checkout-session
-router.post('/create-checkout-session', authMiddleware, paymentController.createCheckoutSession);
+router.post('/create-order', authMiddleware, paymentController.createOrder);
 
-router.post('/webhook', express.raw({ type: 'application/json' }), paymentController.handleStripeWebhook);
+router.post('/verify-payment', authMiddleware, paymentController.verifyPayment);
 
 module.exports = router;

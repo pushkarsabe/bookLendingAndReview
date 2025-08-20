@@ -1,5 +1,5 @@
 console.log('Admin script loaded.');
-// const HOST = 'http://localhost:3000'; // Change this to your actual host URL
+// const HOST = 'http://localhost:3000'; 
 const HOST = 'https://book-lending-and-review.onrender.com';
 
 

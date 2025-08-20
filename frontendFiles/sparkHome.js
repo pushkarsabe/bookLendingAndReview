@@ -1,7 +1,6 @@
 console.log('sparkHome.js loaded');
 // const HOST = 'http://localhost:3000';
 const HOST = 'https://book-lending-and-review.onrender.com';
-const stripe = Stripe('pk_test_51RxqRTDSo6S9zGwsVfw15sTHQIz0zJhL83088Ucijqeg7oQF4jrqPdor2PaGFgmy2N2hBWnkyS1f61HbenOcc1QL00D8PnGwsm');
 
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
@@ -106,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('borrow-btn') && !e.target.disabled) {
             const bookId = e.target.dataset.bookId;
             const bookTitle = e.target.closest('.book-card').querySelector('h3').innerText;
-            const price = 20000; // Example price will be : ₹200
+            const price = 2000; // Example price will be : ₹200
 
             await borrowBook(bookId, bookTitle, price);
         }
@@ -115,36 +114,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper function for borrowing
     async function borrowBook(bookId, bookTitle, price) {
-        console.log('Borrowing book with ID:', bookId, 'and price of:', price);
+        console.log('Borrowing book with ID:', bookId, 'for', price);
 
         try {
-            const response = await axios.post(`${HOST}/api/payments/create-checkout-session`,
+            const orderResponse = await axios.post(`${HOST}/api/payments/create-order`,
                 {
-                    bookId: bookId,
-                    bookTitle: bookTitle,
-                    price: price
+                    amount: price,
+                    currency: 'INR',
+                    bookId: bookId
                 },
                 {
                     headers: { 'Authorization': `Bearer ${token}` }
-                });
+                }
+            );
 
-            const session = response.data;
-            console.log('Checkout session created:', session);
+            const order = orderResponse.data;
+            console.log('order = ', order);
 
-            // This part should now work correctly
-            const result = await stripe.redirectToCheckout({
-                sessionId: session.id,
-            });
+            const user = JSON.parse(localStorage.getItem('user'));
+            console.log('user = ', user);
 
-            if (result.error) {
-                alert(result.error.message);
-            }
+            const options = {
+                "key": "rzp_test_lWJc1uOOOqiLsL", // Enter the Key ID generated from the Dashboard
+                "amount": order.amount,
+                "currency": "INR",
+                "name": "Spark Library",
+                "description": `Borrow: ${bookTitle}`,
+                "order_id": order.id,
+                "handler": async function (response) {
+                    // 3. This function handles the successful payment
+                    try {
+                        await axios.post(`${HOST}/api/payments/verify-payment`, {
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_signature: response.razorpay_signature,
+                            book_id: bookId,
+                            user_id: user.id
+                        }, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+
+                        alert('Book borrowed successfully! It will now appear in your "My Books" section.');
+                        // Refresh the book lists
+                        fetchAndDisplayBooks();
+                        fetchAndDisplayMyBooks();
+                    } catch (verifyError) {
+                        console.error("Payment verification failed:", verifyError);
+                        alert("Payment successful, but verification failed. Please contact support.");
+                    }
+                },
+                "prefill": {
+                    "name": user.name,
+                    "email": user.email, // Use the user's email if available
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            console.log('options = ', options);
+
+            const rzp = new Razorpay(options);
+            rzp.open();
 
         } catch (error) {
             console.error("Payment initiation error:", error);
             alert('Failed to initiate payment. Check the console for details.');
         }
-    }// borrowBook
+    }//borrowBook
+
 
     // Fetch and display user's borrowed books ---
     async function fetchAndDisplayMyBooks() {

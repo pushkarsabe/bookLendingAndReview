@@ -4,7 +4,7 @@ const lendingController = require('../controller/lending');
 const { authMiddleware, isAdmin } = require('../auth/auth');
 
 // POST /api/lendings/borrow - Borrow a book
-router.post('/borrow', authMiddleware, lendingController.borrowBook);
+// router.post('/borrow', authMiddleware, lendingController.borrowBook);
 
 // GET /api/lendings - Get all of the user's borrowed books
 router.get('/', authMiddleware, lendingController.getMyBorrowedBooks);

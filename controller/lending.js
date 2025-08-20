@@ -27,6 +27,7 @@ exports.borrowBook = async (req, res) => {
         const borrow_date = new Date();
         const due_date = new Date();
         due_date.setDate(borrow_date.getDate() + 14); // Set due date 14 days from now
+        console.log('borrow_date - ', borrow_date, ' and due_date - ', due_date);
 
         // Create new lending record
         const newLending = await Lending.create({
