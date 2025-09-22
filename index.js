@@ -55,7 +55,7 @@ Review.belongsTo(Book, { foreignKey: 'book_id' });
 // A Lending record has one Transaction
 Lending.hasOne(Transaction, { foreignKey: 'lending_id' });
 Transaction.belongsTo(Lending, { foreignKey: 'lending_id' });
-
+      
 // Sync database and start server
 let connectToDB = async () => {
     try {
