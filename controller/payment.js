@@ -43,6 +43,9 @@ exports.verifyPayment = async (req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, book_id, user_id } = req.body;
     console.log(`Order ID: ${razorpay_order_id}, Payment ID: ${razorpay_payment_id}, Signature: ${razorpay_signature}, Book ID: ${book_id}, User ID: ${user_id}`);
 
+    console.log('Payment verification - user_id from body:', user_id);
+    console.log('Payment verification - user from token:', req.user.id);
+
     const shasum = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET);
     console.log('shasum ', shasum);
 
@@ -72,7 +75,7 @@ exports.verifyPayment = async (req, res) => {
         const due_date = new Date();
         due_date.setDate(borrow_date.getDate() + 14);
         console.log('borrow_date - ', borrow_date, ' and due_date - ', due_date);
-        
+
         const newLending = await Lending.create({
             user_id,
             book_id,

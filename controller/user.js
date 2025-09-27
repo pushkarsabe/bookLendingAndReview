@@ -17,10 +17,12 @@ exports.register = async (req, res) => {
         }
 
         const newUser = await User.create({ name, email, password });
-
         console.log("User registered successfully:", newUser.name);
 
-        return res.status(201).json({ message: 'User registered successfully!', userId: newUser.user_id });
+        return res.status(201).json({
+            message: 'User registered successfully!',
+            userId: newUser.user_id
+        });
 
     } catch (error) {
         // This will log the specific error to your backend terminal
@@ -50,27 +52,35 @@ exports.login = async (req, res) => {
             return res.status(402).json({ message: 'Invalid credentials.' });
         }
 
-        const payload = {
-            user: {
-                id: user.user_id,
-                isAdmin: user.isAdmin
-            }
-        };
         const userData = {
             id: user.user_id,
+            user_id: user.user_id,
             name: user.name,
             isAdmin: user.isAdmin
+        }
+
+        const payload = {
+            user: userData
+        };
+
+        if (!process.env.JWT_SECRET) {
+            console.error('FATAL: JWT_SECRET not found in environment');
+            return res.status(500).json({ message: 'Server configuration error.' });
         }
 
         jwt.sign(
             payload,
             process.env.JWT_SECRET,
-            { expiresIn: '1h' },
+            { expiresIn: '24h' },
             (err, token) => {
                 if (err) {
                     return res.status(500).json({ message: 'Token creation failed.' });
                 }
-                return res.json({ token, userData, message: 'Logged in successfully!' });
+                return res.json({
+                    token,
+                    userData,
+                    message: 'Logged in successfully!'
+                });
             }
         );
 
