@@ -117,86 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // async function borrowBook(bookId, bookTitle, price) {
-    //     console.log('Borrowing book with ID:', bookId, 'for', price);
-
-    //     try {
-    //         if (checkAuthAndRedirect()) return;
-
-    //         const token = localStorage.getItem('token');
-    //         const orderResponse = await axios.post(`${HOST}/api/payments/create-order`,
-    //             { amount: price, currency: 'INR', bookId: bookId },
-    //             { headers: { 'Authorization': `Bearer ${token}` } }
-    //         );
-
-    //         const order = orderResponse.data;
-    //         const user = JSON.parse(localStorage.getItem('user'));
-
-    //         const options = {
-    //             "key": "rzp_test_lWJc1uOOOqiLsL",
-    //             "amount": order.amount,
-    //             "currency": "INR",
-    //             "name": "Spark Library",
-    //             "description": `Borrow: ${bookTitle}`,
-    //             "order_id": order.id,
-    //             "handler": async function (response) {
-    //                 const freshToken = localStorage.getItem('token');
-    //                 try {
-    //                     await axios.post(`${HOST}/api/payments/verify-payment`, {
-    //                         razorpay_payment_id: response.razorpay_payment_id,
-    //                         razorpay_order_id: response.razorpay_order_id,
-    //                         razorpay_signature: response.razorpay_signature,
-    //                         book_id: bookId,
-    //                         user_id: user.id
-    //                     }, {
-    //                         headers: { 'Authorization': `Bearer ${freshToken}` }
-    //                     });
-
-    //                     alert('Book borrowed successfully! It will now appear in your "My Books" section.');
-    //                     fetchAndDisplayBooks();
-    //                     fetchAndDisplayMyBooks();
-    //                 } catch (verifyError) {
-    //                     console.error("Payment verification failed:", verifyError);
-    //                     alert("Payment successful, but verification failed. Please contact support.");
-    //                     if (verifyError.response && verifyError.response.status === 401) {
-    //                         localStorage.removeItem('token');
-    //                         checkAuthAndRedirect();
-    //                     }
-    //                 }
-    //             },
-    //             "prefill": {
-    //                 "name": user.name,
-    //                 "email": user.email,
-    //             },
-    //             "theme": {
-    //                 "color": "#3399cc"
-    //             }
-    //         };
-    //         const rzp = new Razorpay(options);
-    //         rzp.open();
-    //     } catch (error) {
-    //         console.error("Payment initiation error:", error);
-    //         alert('Failed to initiate payment. Check the console for details.');
-    //         if (error.response && error.response.status === 401) {
-    //             localStorage.removeItem('token');
-    //             checkAuthAndRedirect();
-    //         }
-    //     }
-    // }
-
-    // Fetch and display user's borrowed books
-
-    // sparkHome.js
     async function borrowBook(bookId, bookTitle, price) {
         console.log('Borrowing book with ID:', bookId, 'for', price);
 
         try {
-            // This check ensures the page is still logged in before starting the process
             if (checkAuthAndRedirect()) return;
 
             const token = localStorage.getItem('token');
 
-            // This is the call that is likely failing
             const orderResponse = await axios.post(`${HOST}/api/payments/create-order`,
                 { amount: price, currency: 'INR', bookId: bookId },
                 { headers: { 'Authorization': `Bearer ${token}` } }
@@ -213,8 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "description": `Borrow: ${bookTitle}`,
                 "order_id": order.id,
                 "handler": async function (response) {
-                    // Get the token right before making this call to ensure it's fresh
-                    const freshToken = localStorage.getItem('token');
+                    // Use the token passed from the outer scope, not from localStorage.
                     try {
                         await axios.post(`${HOST}/api/payments/verify-payment`, {
                             razorpay_payment_id: response.razorpay_payment_id,
@@ -223,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             book_id: bookId,
                             user_id: user.id
                         }, {
-                            headers: { 'Authorization': `Bearer ${freshToken}` }
+                            headers: { 'Authorization': `Bearer ${token}` } // Use the token from the parent scope
                         });
 
                         alert('Book borrowed successfully! It will now appear in your "My Books" section.');
@@ -257,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+
 
     async function fetchAndDisplayMyBooks() {
         console.log('Fetching my books :');

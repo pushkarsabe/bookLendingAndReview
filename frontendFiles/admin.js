@@ -2,6 +2,7 @@ console.log('Admin script loaded.');
 // const HOST = 'http://localhost:3000'; 
 const HOST = 'https://book-lending-and-review.onrender.com';
 
+
 function decodeJwt(token) {
     try {
         // Split the token into its three parts: header, payload, and signature
