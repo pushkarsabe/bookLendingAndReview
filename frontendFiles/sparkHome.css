@@ -19,8 +19,6 @@ body {
     line-height: 1.6;
 }
 
-
-
 /* --- Header --- */
 .header-actions {
     margin-left: auto;
@@ -92,7 +90,6 @@ body {
 /* --- Main Content & Spacing --- */
 .main-content {
     padding: 3rem 2rem;
-    /* Space between header and books */
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -122,7 +119,7 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
-    max-height: 630px;
+    max-height: 1000px; /* Increased height to accommodate more books without scrolling */
     overflow-y: auto;
     padding-right: 1rem;
 }
@@ -138,6 +135,7 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     animation: fadeIn 0.5s ease-out forwards;
     opacity: 0;
+    min-height: 300px; /* Further increased to handle multi-line titles */
 }
 
 .book-card:hover {
@@ -156,6 +154,7 @@ body {
     margin-top: 0;
     margin-bottom: 0.5rem;
     font-size: 1.25rem;
+    word-wrap: break-word; 
 }
 
 .book-card .author {
@@ -179,7 +178,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 1rem;
+    padding: 1rem;
     border-top: 1px solid #eee;
 }
 
@@ -230,8 +229,6 @@ body {
     cursor: not-allowed;
 }
 
-
-
 /* _________________________________________________________________________________ */
 
 /* --- Clickable Card Style --- */
@@ -242,7 +239,6 @@ body {
 /* --- My Books Section --- */
 .my-books-section {
     margin-top: 4rem;
-    /* Space between the two sections */
     animation: slideUp 0.7s 0.2s ease-out backwards;
 }
 
@@ -259,7 +255,6 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5rem;
     max-height: 235px;
-    /* Scrollable container height */
     overflow-y: auto;
     padding: 1rem;
     background-color: rgba(0, 0, 0, 0.02);
@@ -327,9 +322,6 @@ body {
 }
 
 /* _________________________________________________________________________________ */
-
-
-
 
 /* --- Footer --- */
 .site-footer-bottom {
@@ -426,7 +418,7 @@ body {
     }
 }
 
-@media (max-widh: 576px) {
+@media (max-width: 576px) {
     .books-grid {
         grid-template-columns: 1fr;
     }
