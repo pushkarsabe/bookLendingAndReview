@@ -1,10 +1,11 @@
+
+
 // sparkHome.js
 console.log('sparkHome.js loaded');
 // const HOST = 'http://localhost:3000';
 const HOST = 'https://book-lending-and-review.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // We no longer need this token variable here as each function will get its own fresh copy.
     const booksGrid = document.getElementById('booksGrid');
     const searchInput = document.getElementById('searchInput');
     const profileIcon = document.getElementById('signOutBtn');
@@ -13,13 +14,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allBooks = [];
 
-    // Redirect if no token is found on initial load
-    const initialToken = localStorage.getItem('token');
-    if (!initialToken) {
-        window.location.href = './index.html';
+    // Function to check authentication status and redirect if needed
+    function checkAuthAndRedirect() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('No token found, redirecting to login.');
+            window.location.href = './index.html';
+            return true; // Indicates a redirection occurred
+        }
+        return false; // No redirection needed
+    }
+
+    // Call the function on page load to ensure the user is authenticated
+    if (checkAuthAndRedirect()) {
         return;
     }
 
+    // Fetch and display data
     fetchAndDisplayBooks();
     fetchAndDisplayMyBooks();
     fetchAndDisplayOverdueBooks();
@@ -39,16 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
         displayBooks(filteredBooks);
     });
 
-    // 4. Fetch books from API
+    // Fetch books from API
     async function fetchAndDisplayBooks() {
         console.log('fetchAndDisplayBooks called');
         try {
-            // Get fresh token just before the call
             const token = localStorage.getItem('token');
-            console.log('Fetching books with token:', token);
             if (!token) {
-                console.error('No token found, redirecting to login.');
-                window.location.href = './index.html';
+                checkAuthAndRedirect();
                 return;
             }
 
@@ -63,16 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to fetch books:', error);
             booksGrid.innerHTML = '<p class="error-message">Failed to load books. Please try again later.</p>';
             if (error.response && error.response.status === 401) {
-                // If token is invalid, redirect to login
                 localStorage.removeItem('token');
-                window.location.href = './index.html';
+                checkAuthAndRedirect();
             }
         }
     }
 
     function displayBooks(books) {
         console.log('displayBooks called books = ', books);
-
         booksGrid.innerHTML = '';
         if (books.length === 0) {
             booksGrid.innerHTML = '<p>No books found in the library.</p>';
@@ -116,7 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Borrowing book with ID:', bookId, 'for', price);
 
         try {
-            // Get fresh token just before this call
+            if (checkAuthAndRedirect()) return;
+
             const token = localStorage.getItem('token');
             const orderResponse = await axios.post(`${HOST}/api/payments/create-order`,
                 { amount: price, currency: 'INR', bookId: bookId },
@@ -134,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 "description": `Borrow: ${bookTitle}`,
                 "order_id": order.id,
                 "handler": async function (response) {
-                    // Get fresh token again right before the next call
                     const freshToken = localStorage.getItem('token');
                     try {
                         await axios.post(`${HOST}/api/payments/verify-payment`, {
@@ -153,6 +159,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     } catch (verifyError) {
                         console.error("Payment verification failed:", verifyError);
                         alert("Payment successful, but verification failed. Please contact support.");
+                        if (verifyError.response && verifyError.response.status === 401) {
+                            localStorage.removeItem('token');
+                            checkAuthAndRedirect();
+                        }
                     }
                 },
                 "prefill": {
@@ -168,20 +178,21 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error("Payment initiation error:", error);
             alert('Failed to initiate payment. Check the console for details.');
+            if (error.response && error.response.status === 401) {
+                localStorage.removeItem('token');
+                checkAuthAndRedirect();
+            }
         }
     }
+
     // Fetch and display user's borrowed books
     async function fetchAndDisplayMyBooks() {
         console.log('Fetching my books :');
         try {
-            // Get fresh token just before the call
+            if (checkAuthAndRedirect()) return;
+
             const token = localStorage.getItem('token');
             console.log('Fetching my books with token:', token);
-            if (!token) {
-                console.error('No token found, redirecting to login.');
-                window.location.href = './index.html';
-                return;
-            }
             myBooksGrid.innerHTML = '';
 
             const response = await axios.get(`${HOST}/api/lendings`, {
@@ -191,13 +202,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Failed to fetch my books:', error);
             myBooksGrid.innerHTML = '<p>Could not load your books.</p>';
+            if (error.response && error.response.status === 401) {
+                localStorage.removeItem('token');
+                checkAuthAndRedirect();
+            }
         }
     }
 
-    // --- NEW: Render cards for "My Books" grid ---
     function displayMyBooks(lendings) {
         console.log('displayMyBooks called lendings = ', lendings);
-
         myBooksGrid.innerHTML = '';
         if (lendings.length === 0) {
             myBooksGrid.innerHTML = '<p>You have not borrowed any books yet.</p>';
@@ -228,7 +241,8 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchAndDisplayOverdueBooks() {
         console.log('Fetching overdue books');
         try {
-            // Get fresh token just before the call
+            if (checkAuthAndRedirect()) return;
+
             const token = localStorage.getItem('token');
             if (!token) {
                 return;
@@ -250,12 +264,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Failed to fetch overdue books:', error);
             overdueBooksGrid.innerHTML = '<p>Could not load your overdue books.</p>';
+            if (error.response && error.response.status === 401) {
+                localStorage.removeItem('token');
+                checkAuthAndRedirect();
+            }
         }
     }
 
     function displayOverdueBooks(lendings) {
         console.log('Displaying overdue books:', lendings);
-
         overdueBooksGrid.innerHTML = '';
         if (lendings.length === 0) {
             overdueBooksGrid.innerHTML = '<p>You have no overdue books.</p>';
@@ -283,4 +300,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-});//domContentLoaded
+});
