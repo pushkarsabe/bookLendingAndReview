@@ -1,21 +1,25 @@
+// sparkHome.js
 console.log('sparkHome.js loaded');
 // const HOST = 'http://localhost:3000';
 const HOST = 'https://book-lending-and-review.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
+    // We no longer need this token variable here as each function will get its own fresh copy.
     const booksGrid = document.getElementById('booksGrid');
     const searchInput = document.getElementById('searchInput');
     const profileIcon = document.getElementById('signOutBtn');
     const myBooksGrid = document.getElementById('myBooksGrid');
     const overdueBooksGrid = document.getElementById('overdueBooksGrid');
 
-    let allBooks = []; // To store all fetched books  
+    let allBooks = [];
 
-    if (!token) {
+    // Redirect if no token is found on initial load
+    const initialToken = localStorage.getItem('token');
+    if (!initialToken) {
         window.location.href = './index.html';
         return;
     }
+
     fetchAndDisplayBooks();
     fetchAndDisplayMyBooks();
     fetchAndDisplayOverdueBooks();
@@ -37,8 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Fetch books from API
     async function fetchAndDisplayBooks() {
+        console.log('fetchAndDisplayBooks called');
         try {
-            let token = localStorage.getItem('token');
+            // Get fresh token just before the call
+            const token = localStorage.getItem('token');
             console.log('Fetching books with token:', token);
             if (!token) {
                 console.error('No token found, redirecting to login.');
@@ -46,15 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // const response = await axios.get(`http://${HOST}:3000/api/books/`, {
-            //     headers: { 'Authorization': `Bearer ${token}` }
-            // });
             const response = await axios.get(`${HOST}/api/books/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             console.log('Books fetched successfully:', response.data);
-            booksGrid.innerHTML = ''; // Clear existing content
-
+            booksGrid.innerHTML = '';
             allBooks = response.data.books;
             displayBooks(allBooks);
         } catch (error) {
@@ -69,6 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayBooks(books) {
+        console.log('displayBooks called books = ', books);
+
         booksGrid.innerHTML = '';
         if (books.length === 0) {
             booksGrid.innerHTML = '<p>No books found in the library.</p>';
@@ -78,10 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
         books.forEach((book, index) => {
             const isAvailable = book.status === 'available';
             const card = document.createElement('div');
-            card.className = 'book-card'; // No longer needs 'clickable' class
+            card.className = 'book-card';
             card.style.animationDelay = `${index * 50}ms`;
 
-            // ADDED THE CARD FOOTER BACK WITH STATUS AND BUTTON
             card.innerHTML = `
                 <div class="card-content">
                     <h3>${book.title}</h3>
@@ -99,50 +102,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Click listener for the main library grid
     booksGrid.addEventListener('click', async (e) => {
-        // Check if the clicked element is a borrow button and is not disabled
         if (e.target.classList.contains('borrow-btn') && !e.target.disabled) {
             const bookId = e.target.dataset.bookId;
             const bookTitle = e.target.closest('.book-card').querySelector('h3').innerText;
-            const price = 2000; // Example price will be : ₹200
+            const price = 2000;
 
             await borrowBook(bookId, bookTitle, price);
         }
     });
 
-
-    // Helper function for borrowing
     async function borrowBook(bookId, bookTitle, price) {
         console.log('Borrowing book with ID:', bookId, 'for', price);
 
         try {
+            // Get fresh token just before this call
+            const token = localStorage.getItem('token');
             const orderResponse = await axios.post(`${HOST}/api/payments/create-order`,
-                {
-                    amount: price,
-                    currency: 'INR',
-                    bookId: bookId
-                },
-                {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                }
+                { amount: price, currency: 'INR', bookId: bookId },
+                { headers: { 'Authorization': `Bearer ${token}` } }
             );
 
             const order = orderResponse.data;
-            console.log('order = ', order);
-
             const user = JSON.parse(localStorage.getItem('user'));
-            console.log('user = ', user);
 
             const options = {
-                "key": "rzp_test_lWJc1uOOOqiLsL", // Enter the Key ID generated from the Dashboard
+                "key": "rzp_test_lWJc1uOOOqiLsL",
                 "amount": order.amount,
                 "currency": "INR",
                 "name": "Spark Library",
                 "description": `Borrow: ${bookTitle}`,
                 "order_id": order.id,
                 "handler": async function (response) {
-                    // 3. This function handles the successful payment
+                    // Get fresh token again right before the next call
+                    const freshToken = localStorage.getItem('token');
                     try {
                         await axios.post(`${HOST}/api/payments/verify-payment`, {
                             razorpay_payment_id: response.razorpay_payment_id,
@@ -151,11 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             book_id: bookId,
                             user_id: user.id
                         }, {
-                            headers: { 'Authorization': `Bearer ${token}` }
+                            headers: { 'Authorization': `Bearer ${freshToken}` }
                         });
 
                         alert('Book borrowed successfully! It will now appear in your "My Books" section.');
-                        // Refresh the book lists
                         fetchAndDisplayBooks();
                         fetchAndDisplayMyBooks();
                     } catch (verifyError) {
@@ -165,41 +157,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 "prefill": {
                     "name": user.name,
-                    "email": user.email, // Use the user's email if available
+                    "email": user.email,
                 },
                 "theme": {
                     "color": "#3399cc"
                 }
             };
-            console.log('options = ', options);
-
             const rzp = new Razorpay(options);
             rzp.open();
-
         } catch (error) {
             console.error("Payment initiation error:", error);
             alert('Failed to initiate payment. Check the console for details.');
         }
-    }//borrowBook
-
-
-    // Fetch and display user's borrowed books ---
+    }
+    // Fetch and display user's borrowed books
     async function fetchAndDisplayMyBooks() {
         console.log('Fetching my books :');
         try {
-            let token = localStorage.getItem('token');
+            // Get fresh token just before the call
+            const token = localStorage.getItem('token');
             console.log('Fetching my books with token:', token);
             if (!token) {
                 console.error('No token found, redirecting to login.');
                 window.location.href = './index.html';
                 return;
             }
-            myBooksGrid.innerHTML = ''; // Clear existing content
+            myBooksGrid.innerHTML = '';
 
-            // Fetch user's borrowed books
-            // const response = await axios.get(`http://${HOST}:3000/api/lendings`, {
-            //     headers: { 'Authorization': `Bearer ${token}` }
-            // });
             const response = await axios.get(`${HOST}/api/lendings`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -210,9 +194,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
     // --- NEW: Render cards for "My Books" grid ---
     function displayMyBooks(lendings) {
+        console.log('displayMyBooks called lendings = ', lendings);
+
         myBooksGrid.innerHTML = '';
         if (lendings.length === 0) {
             myBooksGrid.innerHTML = '<p>You have not borrowed any books yet.</p>';
@@ -222,7 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
         lendings.forEach(lending => {
             const card = document.createElement('div');
             card.className = 'my-book-card';
-            // Store the LENDING ID to pass to the detail page
             card.dataset.lendingId = lending.lending_id;
 
             card.innerHTML = `
@@ -233,21 +217,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
     myBooksGrid.addEventListener('click', (e) => {
         const card = e.target.closest('.my-book-card');
         if (card) {
             const lendingId = card.dataset.lendingId;
-            // Navigate to the new detail page with the lending ID
             window.location.href = `./book.html?lendingId=${lendingId}`;
         }
     });
 
-
     async function fetchAndDisplayOverdueBooks() {
         console.log('Fetching overdue books');
         try {
-            let token = localStorage.getItem('token');
+            // Get fresh token just before the call
+            const token = localStorage.getItem('token');
             if (!token) {
                 return;
             }
@@ -269,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to fetch overdue books:', error);
             overdueBooksGrid.innerHTML = '<p>Could not load your overdue books.</p>';
         }
-    }//fetchAndDisplayOverdueBooks
+    }
 
     function displayOverdueBooks(lendings) {
         console.log('Displaying overdue books:', lendings);
@@ -282,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         lendings.forEach(lending => {
             const card = document.createElement('div');
-            card.className = 'my-book-card overdue'; // Add a class for styling
+            card.className = 'my-book-card overdue';
             card.dataset.lendingId = lending.lending_id;
 
             card.innerHTML = `
@@ -291,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             overdueBooksGrid.appendChild(card);
         });
-    }// displayOverdueBooks
+    }
 
     overdueBooksGrid.addEventListener('click', (e) => {
         const card = e.target.closest('.my-book-card');
@@ -300,6 +282,5 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = `./book.html?lendingId=${lendingId}`;
         }
     });
-
 
 });//domContentLoaded
