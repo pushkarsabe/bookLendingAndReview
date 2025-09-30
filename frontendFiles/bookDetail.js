@@ -1,6 +1,6 @@
 console.log('bookDetail.js loaded');
 // const HOST = 'http://localhost:3000';
-const HOST = 'https://book-lending-and-review.onrender.com';
+const HOST = 'https://book-len/ding-and-review.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
 

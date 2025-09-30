@@ -1,15 +1,20 @@
 // In controller/user.controller.js
 const User = require('../model/User');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const { userRegisterSchema, userLoginSchema } = require('../validation/validationSchemas');
 
 exports.register = async (req, res) => {
+    const { error } = userRegisterSchema.validate(req.body);
+
+    if (error) {
+        const message = error.details.map(detail => detail.message).join(', ');
+        console.log("User registered error message:", message);
+        return res.status(400).json({ message: message });
+    }
+
     try {
         const { name, email, password } = req.body;
-
-        if (!name || !email || !password) {
-            return res.status(400).json({ message: 'Name, email, and password are required.' });
-        }
+        console.log(`name = ${name} , email = ${email} ,password = ${password} `);
 
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
@@ -32,13 +37,17 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+    const { error } = userLoginSchema.validate(req.body);
+
+    if (error) {
+        const message = error.details.map(detail => detail.message).join(', ');
+        console.log("User login error message:", message);
+        return res.status(400).json({ message: message });
+    }
+
     try {
         const { email, password } = req.body;
         console.log('Login attempt with email:', email, ' and password:', password);
-
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Email and password are required.' });
-        }
 
         const user = await User.findOne({ where: { email } });
         if (!user) {

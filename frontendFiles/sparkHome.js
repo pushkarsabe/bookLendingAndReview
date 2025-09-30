@@ -117,6 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
+
     async function borrowBook(bookId, bookTitle, price) {
         console.log('Borrowing book with ID:', bookId, 'for', price);
 

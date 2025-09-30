@@ -1,4 +1,5 @@
 const Book = require('../model/Book'); // Use the central export from model/index.js
+const { bookSchema } = require('../validation/validationSchemas');
 
 // Get all books
 exports.getAllBooks = async (req, res) => {
@@ -49,13 +50,17 @@ exports.getBookById = async (req, res) => {
 
 // --- ADD 'createBook' FUNCTION ---
 exports.createBook = async (req, res) => {
+    const { error } = bookSchema.validate(req.body);
+    if (error) {
+        let message = error.details.map(detail => detail.message).join(', ');
+        console.log("create Book error message:", message);
+        return res.status(400).json({ message: message });
+    }
+
     try {
         const { title, author, description, genre } = req.body;
         console.log('Creating a new book:', { title, author, description, genre });
-
-        if (!title || !author) {
-            return res.status(400).json({ message: 'Title and author are required.' });
-        }
+        
         const newBook = await Book.create({ title, author, description, genre });
         console.log('New book created:', newBook);
 
