@@ -3,11 +3,18 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const sequelize = require('./util/database');
-
+const rateLimit = require('express-rate-limit');
 const userRoutes = require('./routes/user');
 const bookRoutes = require('./routes/book');
 const lendingRoutes = require('./routes/lending');
-const paymentRoutes = require('./routes/payment'); //
+const paymentRoutes = require('./routes/payment');
+
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100,
+    message: 'Too many requests from this IP, please try again after 15 minutes.',
+    standardHeaders: true, // Return rate limit info in headers
+});
 
 const app = express();
 
@@ -23,11 +30,12 @@ const Book = require('./model/Book');
 const Lending = require('./model/Lending');
 const Review = require('./model/Review');
 const Transaction = require('./model/Transaction');
+const { default: rateLimit } = require('express-rate-limit');
 
 app.use('/api/users', userRoutes);
-app.use('/api/books', bookRoutes);
-app.use('/api/lendings', lendingRoutes);
-app.use('/api/payments', paymentRoutes); 
+app.use('/api/books', apiLimiter, bookRoutes);
+app.use('/api/lendings', apiLimiter, lendingRoutes);
+app.use('/api/payments', apiLimiter, paymentRoutes);
 
 // A simple route to serve the main page
 app.get('/', (req, res) => {
@@ -54,7 +62,7 @@ Review.belongsTo(Book, { foreignKey: 'book_id' });
 // A Lending record has one Transaction
 Lending.hasOne(Transaction, { foreignKey: 'lending_id' });
 Transaction.belongsTo(Lending, { foreignKey: 'lending_id' });
-      
+
 // Sync database and start server
 let connectToDB = async () => {
     try {

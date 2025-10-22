@@ -21,7 +21,7 @@ exports.createOrder = async (req, res) => {
             amount: 2000,
             currency: currency,
             receipt: `receipt_book_${bookId}_${Date.now()}`
-        };
+        }; 
         const order = await razorpay.orders.create(options);
 
         if (!order) {
