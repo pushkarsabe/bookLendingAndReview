@@ -30,7 +30,6 @@ const Book = require('./model/Book');
 const Lending = require('./model/Lending');
 const Review = require('./model/Review');
 const Transaction = require('./model/Transaction');
-const { default: rateLimit } = require('express-rate-limit');
 
 app.use('/api/users', userRoutes);
 app.use('/api/books', apiLimiter, bookRoutes);
